@@ -1,0 +1,271 @@
+{
+  "roles": [
+    {
+      "id": "frontend-developer",
+      "name": "Frontend Developer",
+      "required": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "React",
+        "Responsive Design",
+        "Git"
+      ],
+      "niceToHave": [
+        "TypeScript",
+        "Tailwind CSS",
+        "Redux",
+        "REST APIs",
+        "Unit Testing",
+        "Accessibility"
+      ],
+      "keywords": [
+        "UI",
+        "component",
+        "responsive",
+        "SPA",
+        "DOM",
+        "state",
+        "frontend",
+        "cross-browser"
+      ],
+      "commonProjects": [
+        "Personal portfolio website",
+        "Weather app consuming a public API",
+        "E-commerce product listing page with cart",
+        "Responsive landing page clone",
+        "Movie search app using a REST API"
+      ],
+      "learningPriorities": [
+        "Master semantic HTML and modern CSS layouts (Flexbox, Grid)",
+        "Build fluency in JavaScript fundamentals and ES6+",
+        "Learn React core concepts: components, props, hooks, state",
+        "Practice responsive, mobile-first design",
+        "Adopt Git and component-based project structure"
+      ]
+    },
+    {
+      "id": "backend-developer",
+      "name": "Backend Developer",
+      "required": [
+        "JavaScript",
+        "Node.js",
+        "Express.js",
+        "REST APIs",
+        "MongoDB",
+        "Git"
+      ],
+      "niceToHave": [
+        "SQL",
+        "Authentication",
+        "TypeScript",
+        "Unit Testing",
+        "Docker",
+        "Error Handling"
+      ],
+      "keywords": [
+        "API",
+        "server",
+        "database",
+        "endpoint",
+        "CRUD",
+        "JWT",
+        "schema",
+        "backend"
+      ],
+      "commonProjects": [
+        "REST API for a notes or task app",
+        "CRUD API with MongoDB and Express",
+        "User authentication API with JWT",
+        "Blog backend with comments and routes",
+        "URL shortener service"
+      ],
+      "learningPriorities": [
+        "Build REST APIs with Node.js and Express",
+        "Model and query data with MongoDB",
+        "Implement CRUD operations end to end",
+        "Add authentication and input validation",
+        "Practice clean error handling and API testing"
+      ]
+    },
+    {
+      "id": "full-stack-developer",
+      "name": "Full Stack Developer",
+      "required": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "Express.js",
+        "REST APIs",
+        "MongoDB",
+        "Git"
+      ],
+      "niceToHave": [
+        "TypeScript",
+        "Tailwind CSS",
+        "Authentication",
+        "SQL",
+        "Unit Testing",
+        "Deployment"
+      ],
+      "keywords": [
+        "frontend",
+        "backend",
+        "API",
+        "database",
+        "component",
+        "server",
+        "CRUD",
+        "end-to-end"
+      ],
+      "commonProjects": [
+        "MERN task manager with authentication",
+        "Full-stack blog with React frontend and Node API",
+        "E-commerce app with product catalog and cart",
+        "Social feed app with posts and likes",
+        "Expense tracker with charts and a database"
+      ],
+      "learningPriorities": [
+        "Connect a React frontend to a Node/Express API",
+        "Design and consume REST endpoints",
+        "Persist data with MongoDB",
+        "Add user authentication across the stack",
+        "Deploy a full-stack app and manage environment config"
+      ]
+    },
+    {
+      "id": "react-developer",
+      "name": "React Developer",
+      "required": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "React",
+        "State Management",
+        "Git"
+      ],
+      "niceToHave": [
+        "TypeScript",
+        "Redux",
+        "React Router",
+        "Tailwind CSS",
+        "REST APIs",
+        "Unit Testing"
+      ],
+      "keywords": [
+        "component",
+        "hooks",
+        "state",
+        "props",
+        "JSX",
+        "SPA",
+        "render",
+        "reusable"
+      ],
+      "commonProjects": [
+        "Multi-page SPA with React Router",
+        "Reusable component library or design system",
+        "Todo app with global state management",
+        "Dashboard consuming a REST API",
+        "Real-time search and filtering UI"
+      ],
+      "learningPriorities": [
+        "Master React hooks (useState, useEffect, useContext)",
+        "Manage component and global state cleanly",
+        "Compose reusable, prop-driven components",
+        "Handle routing and data fetching in React",
+        "Optimize rendering and structure scalable apps"
+      ]
+    },
+    {
+      "id": "nodejs-developer",
+      "name": "Node.js Developer",
+      "required": [
+        "JavaScript",
+        "Node.js",
+        "Express.js",
+        "REST APIs",
+        "Asynchronous Programming",
+        "Git"
+      ],
+      "niceToHave": [
+        "MongoDB",
+        "SQL",
+        "Authentication",
+        "TypeScript",
+        "Unit Testing",
+        "Error Handling"
+      ],
+      "keywords": [
+        "API",
+        "server",
+        "async",
+        "middleware",
+        "npm",
+        "event loop",
+        "endpoint",
+        "backend"
+      ],
+      "commonProjects": [
+        "REST API server with Express middleware",
+        "CRUD service backed by a database",
+        "Authentication and authorization API",
+        "File upload or image processing service",
+        "Real-time chat backend with WebSockets"
+      ],
+      "learningPriorities": [
+        "Understand the Node.js runtime and event loop",
+        "Build APIs and middleware with Express",
+        "Work confidently with async/await and Promises",
+        "Connect to and query a database",
+        "Structure projects with clean error handling and testing"
+      ]
+    },
+    {
+      "id": "software-engineer-intern",
+      "name": "Software Engineer Intern",
+      "required": [
+        "JavaScript",
+        "Data Structures",
+        "Algorithms",
+        "OOP",
+        "Problem Solving",
+        "Git"
+      ],
+      "niceToHave": [
+        "React",
+        "Node.js",
+        "Python",
+        "SQL",
+        "REST APIs",
+        "Unit Testing"
+      ],
+      "keywords": [
+        "coding",
+        "project",
+        "internship",
+        "debugging",
+        "version control",
+        "teamwork",
+        "fundamentals",
+        "collaboration"
+      ],
+      "commonProjects": [
+        "Console or web app demonstrating core CS concepts",
+        "Algorithm and data-structure problem sets (e.g., LeetCode)",
+        "Small full-stack or CRUD application",
+        "Open-source contribution or team hackathon project",
+        "CLI tool that solves a real problem"
+      ],
+      "learningPriorities": [
+        "Strengthen data structures and algorithms",
+        "Apply object-oriented programming principles",
+        "Practice problem solving and debugging",
+        "Collaborate using Git and pull requests",
+        "Build at least one end-to-end project portfolio piece"
+      ]
+    }
+  ]
+}
