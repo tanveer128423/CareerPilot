@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, Copy, RotateCcw } from "lucide-react";
+import { Check, Copy, KeyRound, RotateCcw } from "lucide-react";
 import { Button } from "../common/Button";
 import { Badge } from "../common/Badge";
 import { formatPlainSummary } from "../../utils/format";
@@ -8,9 +8,13 @@ import type { AnalysisResult } from "../../types";
 export function DashboardHeader({
   analysis,
   onReset,
+  onEditKey,
+  hasKey,
 }: {
   analysis: AnalysisResult;
   onReset: () => void;
+  onEditKey: () => void;
+  hasKey: boolean;
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -36,6 +40,10 @@ export function DashboardHeader({
         </p>
       </div>
       <div className="flex items-center gap-2">
+        <Button variant="secondary" onClick={onEditKey}>
+          <KeyRound size={16} className={hasKey ? "text-success" : undefined} />
+          {hasKey ? "API Key" : "Add API Key"}
+        </Button>
         <Button variant="secondary" onClick={copy}>
           {copied ? <Check size={16} className="text-success" /> : <Copy size={16} />}
           {copied ? "Copied!" : "Copy Summary"}

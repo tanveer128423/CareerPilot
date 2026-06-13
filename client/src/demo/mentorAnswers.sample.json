@@ -1,0 +1,102 @@
+{
+  "default": {
+    "answer": "Here's where you stand for Backend Developer: you're at 40/100 with JavaScript and Git verified, but missing Node.js, Express.js, REST APIs and MongoDB. Your fastest move is to start Node.js — it's Week 1-4 of your roadmap and unlocks everything after it.",
+    "suggestedFollowups": [
+      "What should I learn next?",
+      "Why is my readiness score low?",
+      "Can I become a backend developer in 6 months?"
+    ]
+  },
+  "answers": [
+    {
+      "patterns": ["ready for internships", "am i ready", "ready to apply"],
+      "answer": "For Backend Developer you're at 40/100, so not for backend internships yet — you're missing Node.js, Express.js, REST APIs and MongoDB. You could apply to general or frontend-leaning internships now (you have JavaScript and Git), but close the backend gaps first to be competitive.",
+      "suggestedFollowups": ["What should I learn next?", "Which skill gives me the biggest jump?", "How long until I'm ready?"]
+    },
+    {
+      "patterns": ["what should i learn next", "what to learn", "learn next"],
+      "answer": "Your highest-priority gap is Node.js — it's Week 1-4 of your roadmap. Build a Node.js backend API to start; it's the foundation for Express, REST APIs and everything else on your plan.",
+      "suggestedFollowups": ["What project should I build?", "Can I become a backend developer in 6 months?", "Why is my readiness score low?"]
+    },
+    {
+      "patterns": ["what project should i build", "what project", "build next"],
+      "answer": "Build a REST API for a notes or task app using Node.js and Express. It's your first roadmap milestone's project and closes your Node.js gap directly — then extend it with MongoDB to knock out another gap.",
+      "suggestedFollowups": ["What should I learn next?", "How long until I'm ready?", "Give me a 1-week plan."]
+    },
+    {
+      "patterns": ["become a backend developer in 6 months", "backend developer in 6 months", "6 months", "six months"],
+      "answer": "Realistically, yes. You already have JavaScript and Git. Your roadmap closes the four missing skills over 16 weeks: Node.js (1-4), Express.js (5-8), REST APIs (9-12), MongoDB (13-16). Do those plus one portfolio API and your readiness should climb from 40 toward the 80s.",
+      "suggestedFollowups": ["What should I learn next?", "What project should I build?", "How long until I'm ready?"]
+    },
+    {
+      "patterns": ["react or node", "focus on react", "react vs node"],
+      "answer": "For your Backend Developer target, focus on Node.js — it's your #1 missing required skill. React isn't required for this role, so it won't raise your readiness. If you later switch to Full Stack, we'd add React then.",
+      "suggestedFollowups": ["What should I learn next?", "Which skill gives me the biggest jump?", "Can I become a backend developer in 6 months?"]
+    },
+    {
+      "patterns": ["why is my readiness score low", "why is my score low", "readiness score low", "why is my readiness"],
+      "answer": "Your score is 40/100, and the biggest drags are: technical skills 12/35 (missing 4 of 6 required), experience 0/20 (no internships listed) and resume health 4/10. Closing the backend skills and adding any real experience will move it the most.",
+      "suggestedFollowups": ["What should I learn next?", "I don't have any experience. What do I do?", "How can I improve my resume?"]
+    },
+    {
+      "patterns": ["weakest area", "what's my weakest", "biggest weakness"],
+      "answer": "Your lowest readiness component is experience (0/20) — no internships or professional work is listed. Pursue an internship, freelance gig or open-source contribution; even one entry meaningfully raises this.",
+      "suggestedFollowups": ["I don't have any experience. What do I do?", "How can I improve my resume?", "What should I learn next?"]
+    },
+    {
+      "patterns": ["what are my strengths", "my strengths", "what's good"],
+      "answer": "Your strongest signal is your project: the Portfolio Website demonstrates HTML, CSS and JavaScript. You also have Git. Those are a real foundation — we build the backend stack on top of them.",
+      "suggestedFollowups": ["What should I learn next?", "What project should I build?", "Can I become a backend developer in 6 months?"]
+    },
+    {
+      "patterns": ["improve my resume", "how can i improve my resume", "better resume"],
+      "answer": "Resume health is 37/100, weakest on Impact Metrics (0/100) — none of your bullets have numbers. Add quantified results (e.g. 'built a 5-page site', 'handled 100+ records') and add a Projects/Experience structure.",
+      "suggestedFollowups": ["Why is my readiness score low?", "What's my weakest area?", "What should I learn next?"]
+    },
+    {
+      "patterns": ["know enough javascript", "enough javascript", "good at javascript"],
+      "answer": "Yes — JavaScript is one of your verified required skills for Backend Developer, so that box is checked. Keep using it inside your Node.js projects to deepen it.",
+      "suggestedFollowups": ["What should I learn next?", "What project should I build?", "How long until I'm ready?"]
+    },
+    {
+      "patterns": ["should i learn kubernetes", "kubernetes", "learn k8s", "k8s"],
+      "answer": "Kubernetes isn't in your missing required skills or your roadmap for Backend Developer, so I won't recommend it now. Focus on your verified gaps — starting with Node.js. Once those are closed, you can explore extras.",
+      "suggestedFollowups": ["What should I learn next?", "Which skill gives me the biggest jump?", "Can I become a backend developer in 6 months?"]
+    },
+    {
+      "patterns": ["how long until i'm ready", "how long until i am ready", "how long until ready", "when will i be ready"],
+      "answer": "Your roadmap spans 4 milestones, ending at Week 13-16. Following it closes your 4 missing skills and should lift your readiness well above its current 40/100 — roughly into the low-to-mid 80s with a portfolio project.",
+      "suggestedFollowups": ["What should I learn next?", "What project should I build?", "Give me a 1-week plan."]
+    },
+    {
+      "patterns": ["don't have any experience", "do not have experience", "no experience", "i have no experience"],
+      "answer": "That's your experience score of 0/20. The fastest fixes: an internship application, a freelance project or an open-source contribution. Even shipping your roadmap's notes-app API publicly on GitHub counts as demonstrable experience.",
+      "suggestedFollowups": ["What's my weakest area?", "What project should I build?", "How can I improve my resume?"]
+    },
+    {
+      "patterns": ["biggest jump", "which skill gives me the biggest", "most impactful skill"],
+      "answer": "Node.js. It's the first roadmap milestone and unlocks Express.js, REST APIs and your backend projects. It moves your technical-skills component (currently 12/35) the most.",
+      "suggestedFollowups": ["What should I learn next?", "What project should I build?", "Can I become a backend developer in 6 months?"]
+    },
+    {
+      "patterns": ["portfolio project good enough", "is my portfolio good", "portfolio good enough"],
+      "answer": "Your Portfolio Website is a real, relevant project (HTML/CSS/JS), which is why Project Quality scores well. But for a backend role it doesn't show server skills — add the Node.js notes-app API from your roadmap to make it count for this target.",
+      "suggestedFollowups": ["What project should I build?", "What should I learn next?", "How can I improve my resume?"]
+    },
+    {
+      "patterns": ["add that i know aws", "say i know aws", "claim aws", "i know aws"],
+      "answer": "I can only reference what's on your resume, and it doesn't list AWS, so I can't claim it. If you learn and add it, I'll factor it in — note AWS is a nice-to-have, not a required Backend skill.",
+      "suggestedFollowups": ["What should I learn next?", "Which skill gives me the biggest jump?", "How can I improve my resume?"]
+    },
+    {
+      "patterns": ["should i get a certification", "certification", "get a cert", "certificate"],
+      "answer": "Certifications aren't on your roadmap and won't change your readiness the way closing skill gaps will. Your time is better spent building the Node.js → Express → REST → MongoDB projects on your plan; a shipped project beats a cert for entry-level backend roles in your data.",
+      "suggestedFollowups": ["What should I learn next?", "What project should I build?", "How long until I'm ready?"]
+    },
+    {
+      "patterns": ["1-week plan", "one week plan", "1 week plan", "give me a plan for this week"],
+      "answer": "Week 1 = your first roadmap milestone: start Node.js. Concretely — follow the Node.js docs plus a Node crash course, then build a tiny Express server with one route. That single step begins closing your top gap and sets up next week's REST API work.",
+      "suggestedFollowups": ["What project should I build?", "What should I learn next?", "How long until I'm ready?"]
+    }
+  ]
+}

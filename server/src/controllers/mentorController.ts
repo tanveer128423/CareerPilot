@@ -12,6 +12,7 @@ import type { Request, Response, NextFunction } from "express";
 import { CONFIG, type RoleName } from "../config.js";
 import { AppError, type ApiErrorDetail } from "../utils/AppError.js";
 import { answerMentor, type MentorMessage } from "../services/mentorService.js";
+import { getRequestApiKey } from "../utils/apiKey.js";
 
 function isSupportedRole(role: unknown): role is RoleName {
   return typeof role === "string" && (CONFIG.SUPPORTED_ROLES as readonly string[]).includes(role);
@@ -92,6 +93,7 @@ export async function postMentor(req: Request, res: Response, next: NextFunction
       question: body.question,
       history: (body.history as MentorMessage[]) ?? [],
       grounding: g as never,
+      apiKey: getRequestApiKey(req),
     });
 
     res.status(200).json(result);

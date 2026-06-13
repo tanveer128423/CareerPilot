@@ -8,11 +8,13 @@ import type {
 } from "../types";
 
 const STORAGE_KEY = "careerpilot:analysis";
+const APIKEY_STORAGE = "careerpilot:apikey";
 
 export interface AppState {
   file: File | null;
   fileName: string | null;
   targetRole: RoleName | null;
+  apiKey: string;
   structuredResume: StructuredResume | null;
   rawResumeText: string;
   analysisResult: AnalysisResult | null;
@@ -24,6 +26,7 @@ export interface AppState {
 type Action =
   | { type: "SET_FILE"; file: File | null }
   | { type: "SET_ROLE"; role: RoleName }
+  | { type: "SET_API_KEY"; apiKey: string }
   | { type: "PARSE_START" }
   | { type: "PARSE_SUCCESS"; structuredResume: StructuredResume; rawResumeText: string }
   | { type: "ANALYZE_START" }
@@ -37,6 +40,7 @@ const initialState: AppState = {
   file: null,
   fileName: null,
   targetRole: null,
+  apiKey: "",
   structuredResume: null,
   rawResumeText: "",
   analysisResult: null,
@@ -51,6 +55,8 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, file: action.file, fileName: action.file?.name ?? null, error: null };
     case "SET_ROLE":
       return { ...state, targetRole: action.role, error: null };
+    case "SET_API_KEY":
+      return { ...state, apiKey: action.apiKey };
     case "PARSE_START":
       return { ...state, status: "parsing", error: null };
     case "PARSE_SUCCESS":
@@ -70,7 +76,7 @@ function reducer(state: AppState, action: Action): AppState {
     case "HYDRATE":
       return { ...state, analysisResult: action.analysisResult, status: "ready" };
     case "RESET":
-      return { ...initialState };
+      return { ...initialState, apiKey: state.apiKey };
     default:
       return state;
   }
@@ -85,9 +91,11 @@ const AppContext = createContext<AppContextValue | null>(null);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // Hydrate analysisResult from sessionStorage on first load (demo-safety).
+  // Hydrate analysisResult + apiKey from sessionStorage on first load (demo-safety).
   useEffect(() => {
     try {
+      const savedKey = sessionStorage.getItem(APIKEY_STORAGE);
+      if (savedKey) dispatch({ type: "SET_API_KEY", apiKey: savedKey });
       const raw = sessionStorage.getItem(STORAGE_KEY);
       if (raw) dispatch({ type: "HYDRATE", analysisResult: JSON.parse(raw) as AnalysisResult });
     } catch {
@@ -107,6 +115,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
       /* ignore */
     }
   }, [state.analysisResult]);
+
+  // Mirror the API key to sessionStorage so it survives a refresh.
+  useEffect(() => {
+    try {
+      if (state.apiKey) sessionStorage.setItem(APIKEY_STORAGE, state.apiKey);
+      else sessionStorage.removeItem(APIKEY_STORAGE);
+    } catch {
+      /* ignore */
+    }
+  }, [state.apiKey]);
 
   const value = useMemo(() => ({ state, dispatch }), [state]);
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -17,9 +17,10 @@ import { CONFIG, type RoleName } from "../config.js";
 import { AppError } from "../utils/AppError.js";
 import { extractText } from "../services/textExtractor.js";
 import parseResume from "../services/resumeParser.js";
-import { geminiStructurer } from "../services/geminiStructurer.js";
+import { createGeminiStructurer } from "../services/geminiStructurer.js";
 import type { StructuredResume } from "../services/resumeParser.js";
 import { validate } from "../utils/validators.js";
+import { getRequestApiKey } from "../utils/apiKey.js";
 import { logger } from "../utils/logger.js";
 
 function isSupportedRole(role: unknown): role is RoleName {
@@ -80,7 +81,8 @@ export async function postParse(req: Request, res: Response, next: NextFunction)
     const rawResumeText = fullText.slice(0, CONFIG.RAW_TEXT_LIMIT);
 
     // Deterministic-first structuring; Gemini fallback only fires for sparse input.
-    const parsed = await parseResume(rawResumeText, { structurer: geminiStructurer });
+    const structurer = createGeminiStructurer(getRequestApiKey(req));
+    const parsed = await parseResume(rawResumeText, { structurer });
     const structuredResume = toSchemaSafeResume(parsed);
 
     // Validate the assembled StructuredResume before returning.

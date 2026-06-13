@@ -11,11 +11,13 @@ const mocks = vi.hoisted(() => ({
   replies: [] as string[], // consumed in order, one per callGemini call
   calls: 0,
   lastSystem: "" as string,
+  lastApiKey: undefined as string | undefined,
 }));
 
 vi.mock("./geminiClient.js", () => ({
-  callGemini: vi.fn(async (args: { system?: string }) => {
+  callGemini: vi.fn(async (args: { system?: string; apiKey?: string }) => {
     mocks.lastSystem = args.system ?? "";
+    mocks.lastApiKey = args.apiKey;
     const reply = mocks.replies[mocks.calls] ?? mocks.replies[mocks.replies.length - 1] ?? "";
     mocks.calls += 1;
     return reply;
@@ -92,6 +94,11 @@ describe("answerMentor", () => {
       status: 502,
       retryable: true,
     });
+  });
+
+  it("forwards a per-request apiKey to callGemini", async () => {
+    await answerMentor({ question: "x", history: [], grounding, apiKey: "user-key-123" });
+    expect(mocks.lastApiKey).toBe("user-key-123");
   });
 
   it("truncates history to CONFIG.MAX_HISTORY without throwing", async () => {

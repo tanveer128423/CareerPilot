@@ -10,6 +10,8 @@ import { Button } from "../components/common/Button";
 import { ErrorBanner } from "../components/common/ErrorBanner";
 import { FileDropzone } from "../components/upload/FileDropzone";
 import { RoleSelector } from "../components/upload/RoleSelector";
+import { ApiKeyModal } from "../components/upload/ApiKeyModal";
+import { getHealth } from "../api/client";
 import type { RoleEntry } from "../types";
 
 const STEPS = ["Reading resume", "Matching skills", "Scoring readiness", "Building roadmap"];
@@ -20,11 +22,16 @@ export function UploadPage() {
   const { run } = useAnalysis();
   const [roles, setRoles] = useState<RoleEntry[]>([]);
   const [rolesError, setRolesError] = useState<string | null>(null);
+  const [showKeyModal, setShowKeyModal] = useState(false);
+  const [serverHasKey, setServerHasKey] = useState(false);
 
   useEffect(() => {
     getRoles()
       .then(setRoles)
       .catch(() => setRolesError("Couldn't load roles. Is the API running?"));
+    getHealth()
+      .then((h) => setServerHasKey(Boolean(h.geminiConfigured)))
+      .catch(() => setServerHasKey(false));
   }, []);
 
   const busy = state.status === "parsing" || state.status === "analyzing";
@@ -33,9 +40,27 @@ export function UploadPage() {
 
   const canAnalyze = !!state.file && !!state.targetRole && !busy;
 
-  const onAnalyze = async () => {
+  // Step 1: clicking Analyze opens the API-key modal. If the user already
+  // entered a key earlier this session, proceed straight to analysis.
+  const onAnalyzeClick = () => {
+    if (!canAnalyze) return;
+    if (state.apiKey) {
+      void startAnalysis();
+    } else {
+      setShowKeyModal(true);
+    }
+  };
+
+  // Step 2: after the key is provided (or skipped), run parse -> analyze.
+  const startAnalysis = async () => {
+    setShowKeyModal(false);
     const result = await run();
     if (result) nav("/dashboard");
+  };
+
+  const onKeyContinue = (key: string) => {
+    dispatch({ type: "SET_API_KEY", apiKey: key });
+    void startAnalysis();
   };
 
   return (
@@ -60,7 +85,7 @@ export function UploadPage() {
         </Card>
 
         {state.error && (
-          <ErrorBanner message={state.error.message} retryable={state.error.retryable} onRetry={onAnalyze} />
+          <ErrorBanner message={state.error.message} retryable={state.error.retryable} onRetry={onAnalyzeClick} />
         )}
 
         {busy ? (
@@ -98,11 +123,20 @@ export function UploadPage() {
             />
           </Card>
         ) : (
-          <Button size="lg" className="w-full" disabled={!canAnalyze} onClick={onAnalyze}>
+          <Button size="lg" className="w-full" disabled={!canAnalyze} onClick={onAnalyzeClick}>
             Analyze My Resume <ArrowRight size={18} />
           </Button>
         )}
       </div>
+
+      <ApiKeyModal
+        open={showKeyModal}
+        onClose={() => setShowKeyModal(false)}
+        onContinue={onKeyContinue}
+        initialKey={state.apiKey}
+        allowSkip={serverHasKey}
+        onSkip={() => void startAnalysis()}
+      />
     </div>
   );
 }

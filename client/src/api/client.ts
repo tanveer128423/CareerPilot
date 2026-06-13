@@ -42,41 +42,73 @@ async function parseOrThrow<T>(res: Response): Promise<T> {
   return body as T;
 }
 
+/** Add the optional per-request Gemini key header. */
+function withKey(headers: Record<string, string>, apiKey?: string): Record<string, string> {
+  return apiKey && apiKey.trim() ? { ...headers, "X-Gemini-Api-Key": apiKey.trim() } : headers;
+}
+
+export interface HealthResponse {
+  ok: boolean;
+  service: string;
+  version: string;
+  geminiConfigured: boolean;
+  timestamp: string;
+}
+
+export async function getHealth(): Promise<HealthResponse> {
+  const res = await fetch(`${BASE_URL}/api/health`, { headers: { Accept: "application/json" } });
+  return parseOrThrow<HealthResponse>(res);
+}
+
 export async function getRoles(): Promise<RoleEntry[]> {
   const res = await fetch(`${BASE_URL}/api/roles`, { headers: { Accept: "application/json" } });
   const data = await parseOrThrow<{ roles: RoleEntry[] }>(res);
   return data.roles;
 }
 
-export async function postParse(file: File, targetRole: RoleName): Promise<ParseResponse> {
+export async function postParse(
+  file: File,
+  targetRole: RoleName,
+  apiKey?: string,
+): Promise<ParseResponse> {
   const form = new FormData();
   form.append("file", file);
   form.append("targetRole", targetRole);
-  const res = await fetch(`${BASE_URL}/api/parse`, { method: "POST", body: form });
+  const res = await fetch(`${BASE_URL}/api/parse`, {
+    method: "POST",
+    headers: withKey({}, apiKey),
+    body: form,
+  });
   return parseOrThrow<ParseResponse>(res);
 }
 
-export async function postAnalyze(payload: {
-  targetRole: RoleName;
-  structuredResume: StructuredResume;
-  rawResumeText?: string;
-}): Promise<AnalysisResult> {
+export async function postAnalyze(
+  payload: {
+    targetRole: RoleName;
+    structuredResume: StructuredResume;
+    rawResumeText?: string;
+  },
+  apiKey?: string,
+): Promise<AnalysisResult> {
   const res = await fetch(`${BASE_URL}/api/analyze`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    headers: withKey({ "Content-Type": "application/json", Accept: "application/json" }, apiKey),
     body: JSON.stringify(payload),
   });
   return parseOrThrow<AnalysisResult>(res);
 }
 
-export async function postMentor(payload: {
-  question: string;
-  history: MentorMessage[];
-  grounding: MentorGrounding;
-}): Promise<MentorResponse> {
+export async function postMentor(
+  payload: {
+    question: string;
+    history: MentorMessage[];
+    grounding: MentorGrounding;
+  },
+  apiKey?: string,
+): Promise<MentorResponse> {
   const res = await fetch(`${BASE_URL}/api/mentor`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    headers: withKey({ "Content-Type": "application/json", Accept: "application/json" }, apiKey),
     body: JSON.stringify(payload),
   });
   return parseOrThrow<MentorResponse>(res);

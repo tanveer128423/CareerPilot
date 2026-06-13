@@ -10,12 +10,14 @@ import { ResumeHealthReport } from "../components/dashboard/ResumeHealthReport";
 import { SkillGapMatrix } from "../components/dashboard/SkillGapMatrix";
 import { RoadmapTimeline } from "../components/dashboard/RoadmapTimeline";
 import { MentorChat } from "../components/mentor/MentorChat";
+import { ApiKeyModal } from "../components/upload/ApiKeyModal";
 
 export function DashboardPage() {
   const nav = useNavigate();
   const { state, dispatch } = useApp();
   const [chatOpen, setChatOpen] = useState(false);
   const [seed, setSeed] = useState<string | null>(null);
+  const [keyModalOpen, setKeyModalOpen] = useState(false);
 
   const analysis = state.analysisResult;
 
@@ -43,7 +45,12 @@ export function DashboardPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <DashboardHeader analysis={analysis} onReset={reset} />
+      <DashboardHeader
+        analysis={analysis}
+        onReset={reset}
+        onEditKey={() => setKeyModalOpen(true)}
+        hasKey={Boolean(state.apiKey)}
+      />
 
       <div className="space-y-5">
         <ReadinessScore readiness={analysis.readiness} onAskMentor={() => askMentor("Am I ready for internships?")} />
@@ -66,6 +73,16 @@ export function DashboardPage() {
       </button>
 
       <MentorChat analysis={analysis} open={chatOpen} onClose={() => setChatOpen(false)} seed={seed} />
+
+      <ApiKeyModal
+        open={keyModalOpen}
+        onClose={() => setKeyModalOpen(false)}
+        initialKey={state.apiKey}
+        onContinue={(key) => {
+          dispatch({ type: "SET_API_KEY", apiKey: key });
+          setKeyModalOpen(false);
+        }}
+      />
     </div>
   );
 }

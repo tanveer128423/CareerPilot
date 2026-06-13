@@ -1,0 +1,186 @@
+{
+  "bilal-backend": {
+    "targetRole": "Backend Developer",
+    "matchObject": {
+      "role": "Backend Developer",
+      "requiredSkills": ["JavaScript", "Node.js", "Express.js", "REST APIs", "MongoDB", "Git"],
+      "niceToHaveSkills": ["SQL", "Authentication", "TypeScript", "Unit Testing", "Docker", "Error Handling"],
+      "have": ["JavaScript", "Git"],
+      "missing": ["Node.js", "Express.js", "REST APIs", "MongoDB"],
+      "matchedNiceToHave": [],
+      "coveragePercentage": 33
+    },
+    "resumeHealth": {
+      "overall": 37,
+      "dimensions": [
+        {
+          "key": "formatting",
+          "label": "Formatting Quality",
+          "score": 59,
+          "reason": "Sections are readable but the resume is short and has no dedicated Experience section.",
+          "tip": "Add an Experience (or Internships) section and keep date formats consistent."
+        },
+        {
+          "key": "impactMetrics",
+          "label": "Impact Metrics",
+          "score": 0,
+          "reason": "None of your bullets contain quantified results.",
+          "tip": "Add numbers — e.g. 'built a 5-page site' or 'handled 100+ records'."
+        },
+        {
+          "key": "skillsCoverage",
+          "label": "Skills Coverage",
+          "score": 28,
+          "reason": "Only 2 of 6 required Backend Developer skills are present.",
+          "tip": "Learn and list Node.js, Express.js, REST APIs and MongoDB."
+        },
+        {
+          "key": "keywordCoverage",
+          "label": "Keyword Coverage",
+          "score": 13,
+          "reason": "Few backend keywords (API, server, database, CRUD) appear in the resume.",
+          "tip": "Describe projects using role keywords like REST API, schema and JWT."
+        },
+        {
+          "key": "projectQuality",
+          "label": "Project Quality",
+          "score": 87,
+          "reason": "Your Portfolio Website is a real, relevant project — but it's a single, frontend-only piece.",
+          "tip": "Add one backend project (a Node.js + Express REST API) to show server skills."
+        }
+      ]
+    },
+    "readiness": {
+      "score": 40,
+      "strengths": [
+        "Solid JavaScript fundamentals (a verified required skill).",
+        "Uses Git for version control.",
+        "Has a real, shipped project: the Portfolio Website."
+      ],
+      "weaknesses": [
+        "Missing 4 of 6 required backend skills: Node.js, Express.js, REST APIs, MongoDB.",
+        "No internship or professional experience listed (experience 0/20).",
+        "No quantified achievements on the resume."
+      ],
+      "nextActions": [
+        "Start Node.js (roadmap Week 1-4) — it unlocks Express, REST APIs and your backend projects.",
+        "Build the roadmap's notes/task REST API and ship it publicly on GitHub.",
+        "Add any real experience — an internship, freelance gig, or open-source contribution."
+      ],
+      "scoreBreakdown": {
+        "technicalSkills": 12,
+        "projects": 21,
+        "experience": 0,
+        "resumeHealth": 4,
+        "roleAlignment": 3
+      }
+    },
+    "roadmap": [
+      {
+        "phase": "Week 1-4",
+        "skill": "Node.js",
+        "gapAddressed": "Node.js",
+        "project": "Build a small Node.js server with one route",
+        "resource": "Node.js docs + a Node crash course"
+      },
+      {
+        "phase": "Week 5-8",
+        "skill": "Express.js",
+        "gapAddressed": "Express.js",
+        "project": "Turn your server into an Express app with multiple routes",
+        "resource": "Express.js official guide"
+      },
+      {
+        "phase": "Week 9-12",
+        "skill": "REST APIs",
+        "gapAddressed": "REST APIs",
+        "project": "Build a REST API for a notes or task app",
+        "resource": "REST API design tutorial"
+      },
+      {
+        "phase": "Week 13-16",
+        "skill": "MongoDB",
+        "gapAddressed": "MongoDB",
+        "project": "Persist the notes/task API in MongoDB (full CRUD)",
+        "resource": "MongoDB University M001"
+      }
+    ]
+  },
+  "aisha-backend": {
+    "targetRole": "Backend Developer",
+    "matchObject": {
+      "role": "Backend Developer",
+      "requiredSkills": ["JavaScript", "Node.js", "Express.js", "REST APIs", "MongoDB", "Git"],
+      "niceToHaveSkills": ["SQL", "Authentication", "TypeScript", "Unit Testing", "Docker", "Error Handling"],
+      "have": ["JavaScript", "Node.js", "Express.js", "REST APIs", "MongoDB", "Git"],
+      "missing": [],
+      "matchedNiceToHave": ["SQL", "Authentication", "Unit Testing"],
+      "coveragePercentage": 100
+    },
+    "resumeHealth": {
+      "overall": 88,
+      "dimensions": [
+        {
+          "key": "formatting",
+          "label": "Formatting Quality",
+          "score": 90,
+          "reason": "All four sections are present with clear contact details.",
+          "tip": "Keep it tight to one page and maintain consistent date formats."
+        },
+        {
+          "key": "impactMetrics",
+          "label": "Impact Metrics",
+          "score": 100,
+          "reason": "Every bullet is quantified (30% faster, 1,200+ users, 500+ records).",
+          "tip": "Maintain this — lead each bullet with the metric where possible."
+        },
+        {
+          "key": "skillsCoverage",
+          "label": "Skills Coverage",
+          "score": 100,
+          "reason": "All 6 of 6 required Backend Developer skills are present.",
+          "tip": "Add nice-to-haves like Docker to broaden your profile further."
+        },
+        {
+          "key": "keywordCoverage",
+          "label": "Keyword Coverage",
+          "score": 50,
+          "reason": "Strong technical content but a few role keywords are missing.",
+          "tip": "Weave in keywords like schema, middleware and endpoint where relevant."
+        },
+        {
+          "key": "projectQuality",
+          "label": "Project Quality",
+          "score": 99,
+          "reason": "Two relevant backend projects with clear tech stacks and summaries.",
+          "tip": "Add a short architecture note or system-design detail to stand out."
+        }
+      ]
+    },
+    "readiness": {
+      "score": 87,
+      "strengths": [
+        "All 6 required Backend Developer skills are present (100% coverage).",
+        "Bonus nice-to-haves matched: SQL, Authentication, Unit Testing.",
+        "Strong, quantified projects including an E-commerce API."
+      ],
+      "weaknesses": [
+        "Professional experience is light (experience 11/20).",
+        "A few role keywords could be added for keyword coverage."
+      ],
+      "nextActions": [
+        "Apply now — you're interview-ready for Backend Developer.",
+        "Prepare for technical interviews: system design and data structures.",
+        "Pursue an internship or contract role to deepen professional experience."
+      ],
+      "scoreBreakdown": {
+        "technicalSkills": 35,
+        "projects": 25,
+        "experience": 11,
+        "resumeHealth": 9,
+        "roleAlignment": 7
+      }
+    },
+    "roadmap": []
+  }
+}

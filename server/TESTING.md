@@ -214,6 +214,19 @@ for live answers) → **Copy Summary** writes plain text to clipboard → refres
 
 > The client reads `VITE_API_BASE_URL` from `client/.env` (defaults to `http://localhost:8080`).
 
+### Bring-your-own Gemini key (no server `.env` needed)
+Clicking **Analyze My Resume** opens an **API-key modal** (with a collapsible
+"How do I get an API key?" help section linking to `aistudio.google.com/app/apikey`).
+Enter a key → **Continue** → analysis runs → dashboard. The key is:
+- stored only in the browser (sessionStorage, survives refresh),
+- sent on every request as the `X-Gemini-Api-Key` header,
+- used by the backend for that request (takes precedence over the server env key),
+- powering the **Ask the Mentor** chat.
+
+Precedence: per-request header key → server `GEMINI_API_KEY` → else a clear
+`AI_UNAVAILABLE` "Please provide a Gemini API key" error. If the server already
+has a key, the modal shows a **Skip** option.
+
 ---
 
 ## Phase 9 — Demo Mode

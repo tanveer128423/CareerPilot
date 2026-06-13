@@ -52,33 +52,40 @@ Return JSON ONLY in this exact shape:
 }`;
 }
 
-export const geminiStructurer: GeminiStructurer = {
-  async structure(rawText: string): Promise<StructuredOut> {
-    const raw = await callGemini({
-      system: SYSTEM_PROMPT,
-      prompt: buildUserPrompt(rawText),
-      jsonMode: true,
-      temperature: 0.1,
-      timeoutMs: CONFIG.GEMINI_TIMEOUT_ANALYZE,
-      retries: CONFIG.GEMINI_RETRIES,
-    });
-
-    const parsed = safeParseJson<Partial<StructuredOut>>(raw);
-    if (!parsed.ok || typeof parsed.value !== "object" || parsed.value === null) {
-      throw new AppError("AI_BAD_JSON", "The AI returned an unreadable response. Please try again.", {
-        status: 502,
-        retryable: true,
+/** Create a structurer bound to an optional per-request API key. */
+export function createGeminiStructurer(apiKey?: string): GeminiStructurer {
+  return {
+    async structure(rawText: string): Promise<StructuredOut> {
+      const raw = await callGemini({
+        system: SYSTEM_PROMPT,
+        prompt: buildUserPrompt(rawText),
+        jsonMode: true,
+        temperature: 0.1,
+        timeoutMs: CONFIG.GEMINI_TIMEOUT_ANALYZE,
+        retries: CONFIG.GEMINI_RETRIES,
+        apiKey,
       });
-    }
 
-    const v = parsed.value;
-    return {
-      skills: Array.isArray(v.skills) ? v.skills : [],
-      projects: Array.isArray(v.projects) ? v.projects : [],
-      experience: Array.isArray(v.experience) ? v.experience : [],
-      education: Array.isArray(v.education) ? v.education : [],
-    };
-  },
-};
+      const parsed = safeParseJson<Partial<StructuredOut>>(raw);
+      if (!parsed.ok || typeof parsed.value !== "object" || parsed.value === null) {
+        throw new AppError("AI_BAD_JSON", "The AI returned an unreadable response. Please try again.", {
+          status: 502,
+          retryable: true,
+        });
+      }
+
+      const v = parsed.value;
+      return {
+        skills: Array.isArray(v.skills) ? v.skills : [],
+        projects: Array.isArray(v.projects) ? v.projects : [],
+        experience: Array.isArray(v.experience) ? v.experience : [],
+        education: Array.isArray(v.education) ? v.education : [],
+      };
+    },
+  };
+}
+
+/** Default structurer using the server env key (back-compat). */
+export const geminiStructurer: GeminiStructurer = createGeminiStructurer();
 
 export default geminiStructurer;

@@ -7,10 +7,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import request from "supertest";
 
-const mocks = vi.hoisted(() => ({ reply: "" }));
+const mocks = vi.hoisted(() => ({ reply: "", lastApiKey: undefined as string | undefined }));
 
 vi.mock("../services/geminiClient.js", () => ({
-  callGemini: vi.fn(async () => mocks.reply),
+  callGemini: vi.fn(async (args: { apiKey?: string }) => {
+    mocks.lastApiKey = args.apiKey;
+    return mocks.reply;
+  }),
 }));
 
 import app from "../server.js";
@@ -56,6 +59,16 @@ describe("POST /api/mentor", () => {
   it("works without history (defaults to [])", async () => {
     const res = await mentor({ question: "Am I ready?", grounding });
     expect(res.status).toBe(200);
+  });
+
+  it("forwards the X-Gemini-Api-Key header to the Gemini client", async () => {
+    mocks.lastApiKey = undefined;
+    const res = await request(app)
+      .post("/api/mentor")
+      .set("X-Gemini-Api-Key", "hdr-key-789")
+      .send({ question: "What next?", history: [], grounding });
+    expect(res.status).toBe(200);
+    expect(mocks.lastApiKey).toBe("hdr-key-789");
   });
 
   it("400 VALIDATION_ERROR — empty question", async () => {

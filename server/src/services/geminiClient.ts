@@ -21,6 +21,8 @@ export interface CallGeminiArgs {
   temperature?: number;
   timeoutMs: number;
   retries?: number;
+  /** Optional per-request API key (e.g., provided by the user via the UI). */
+  apiKey?: string;
 }
 
 class TimeoutError extends Error {
@@ -34,10 +36,13 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function getApiKey(): string {
-  const key = process.env.GEMINI_API_KEY;
+function getApiKey(provided?: string): string {
+  // Prefer a per-request key (from the UI), fall back to the server env key.
+  const key = (provided && provided.trim()) || process.env.GEMINI_API_KEY;
   if (!key || key.trim() === "") {
-    throw new AppError("AI_UNAVAILABLE", "AI service is not configured.", { retryable: false });
+    throw new AppError("AI_UNAVAILABLE", "AI service is not configured. Please provide a Gemini API key.", {
+      retryable: false,
+    });
   }
   return key;
 }
@@ -73,7 +78,7 @@ export async function callGemini(args: CallGeminiArgs): Promise<string> {
     retries = CONFIG.GEMINI_RETRIES,
   } = args;
 
-  const apiKey = getApiKey();
+  const apiKey = getApiKey(args.apiKey);
   const client = new GoogleGenerativeAI(apiKey);
 
   const model = client.getGenerativeModel({

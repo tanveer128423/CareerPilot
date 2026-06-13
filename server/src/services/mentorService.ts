@@ -43,6 +43,8 @@ export interface AnswerMentorInput {
   question: string;
   history?: MentorMessage[];
   grounding: MentorGrounding;
+  /** Optional per-request Gemini API key supplied by the user via the UI. */
+  apiKey?: string;
 }
 
 export interface MentorResponse {
@@ -115,7 +117,7 @@ function parseValidReply(raw: string): MentorResponse | null {
  * @throws AppError("AI_BAD_JSON") when the model fails to return valid JSON twice.
  */
 export async function answerMentor(input: AnswerMentorInput): Promise<MentorResponse> {
-  const { question, history = [], grounding } = input;
+  const { question, history = [], grounding, apiKey } = input;
 
   // --- Reconstruct internal shapes server-side (no AI, no network) ---
   const roleName = grounding.targetRole ?? grounding.matchObject?.role;
@@ -158,6 +160,7 @@ export async function answerMentor(input: AnswerMentorInput): Promise<MentorResp
       jsonMode: true,
       temperature: 0.6,
       timeoutMs: CONFIG.GEMINI_TIMEOUT_MENTOR,
+      apiKey,
     });
     const result = parseValidReply(raw);
     if (result) return result;

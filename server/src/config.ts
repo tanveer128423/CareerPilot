@@ -47,7 +47,9 @@ export const CONFIG = {
   GEMINI_TIMEOUT_ANALYZE: 20000,
   GEMINI_TIMEOUT_MENTOR: 15000,
   GEMINI_RETRIES: 2,
-  GEMINI_MODEL: "gemini-1.5-flash",
+  // gemini-1.5-flash is retired for newer API keys (returns 404). Use a current
+  // model; override with GEMINI_MODEL env if needed.
+  GEMINI_MODEL: process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash",
 
   // Mentor
   MAX_HISTORY: 20,
