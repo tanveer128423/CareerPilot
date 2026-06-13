@@ -16,7 +16,7 @@ type CompareMode = "transformation" | "sideBySide";
 
 const PROFILE_META: Record<DemoResumeId, { name: string; blurb: string }> = {
   "bilal-backend": {
-    name: "Bilal",
+    name: "John Doe",
     blurb: "Self-taught, early-stage backend candidate",
   },
   "aisha-backend": {
@@ -96,7 +96,7 @@ export function ComparePage() {
           <ScoreGlowUp
             before={buildDemoSeed("bilal-backend").analysis}
             after={buildDemoSeed("aisha-backend").analysis}
-            name="Bilal"
+            name="John Doe"
             onExplore={() => loadProfile("aisha-backend")}
           />
         </div>

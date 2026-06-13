@@ -25,8 +25,8 @@ export function ReadinessScore({
   return (
     <Card featured>
       <div className="flex flex-col lg:flex-row gap-6">
-        <div className="flex flex-col items-center justify-center lg:w-64 shrink-0">
-          <h2 className="text-lg font-semibold mb-3 self-start">Career Readiness</h2>
+        <div className="flex flex-col items-center lg:w-64 shrink-0">
+          <h2 className="self-start text-lg font-semibold mb-4">Career Readiness</h2>
           <ScoreGauge score={readiness.score} />
           <Button className="mt-4" onClick={onAskMentor}>
             <MessageSquare size={16} /> Ask the Mentor
