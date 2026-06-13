@@ -18,15 +18,48 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import { AppError } from "./utils/AppError.js";
 import { logger } from "./utils/logger.js";
 
+/**
+ * Build a tolerant CORS origin check. ALLOWED_ORIGIN may be a comma-separated
+ * list; trailing slashes are ignored (browsers send Origin without one). Any
+ * *.vercel.app deploy (preview or production) and localhost are also allowed so
+ * the demo never breaks when Vercel mints a new preview URL.
+ */
+function corsOrigin(
+  origin: string | undefined,
+  cb: (err: Error | null, allow?: boolean) => void,
+): void {
+  // Non-browser callers (curl, health checks, same-origin) send no Origin.
+  if (!origin) return cb(null, true);
+
+  const clean = origin.replace(/\/+$/, "");
+  const allowList = CONFIG.ALLOWED_ORIGIN.split(",")
+    .map((s) => s.trim().replace(/\/+$/, ""))
+    .filter(Boolean);
+
+  let host = "";
+  try {
+    host = new URL(clean).hostname;
+  } catch {
+    return cb(null, false);
+  }
+
+  const allowed =
+    allowList.includes(clean) ||
+    /(^|\.)vercel\.app$/.test(host) ||
+    /^localhost$|^127\.0\.0\.1$/.test(host);
+
+  return cb(null, allowed);
+}
+
 export function createApp() {
   const app = express();
 
   app.disable("x-powered-by");
 
-  // CORS locked to the configured client origin; expose the trace header.
+  // CORS: configured origin(s) + any *.vercel.app deploy + localhost.
   app.use(
     cors({
-      origin: CONFIG.ALLOWED_ORIGIN,
+      origin: corsOrigin,
       exposedHeaders: ["X-Request-Id"],
     }),
   );
