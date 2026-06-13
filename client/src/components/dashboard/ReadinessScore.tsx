@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, MessageSquare, XCircle } from "lucide-react";
+import { ArrowRight, CheckCircle2, MessageSquare, ShieldCheck, XCircle } from "lucide-react";
 import { Card } from "../common/Card";
 import { Button } from "../common/Button";
 import { ScoreGauge } from "../common/ScoreGauge";
@@ -7,9 +7,11 @@ import type { CareerReadiness } from "../../types";
 export function ReadinessScore({
   readiness,
   onAskMentor,
+  onWhyTrust,
 }: {
   readiness: CareerReadiness;
   onAskMentor: () => void;
+  onWhyTrust: () => void;
 }) {
   const b = readiness.scoreBreakdown;
   const parts: Array<[string, number, number]> = [
@@ -29,6 +31,12 @@ export function ReadinessScore({
           <Button className="mt-4" onClick={onAskMentor}>
             <MessageSquare size={16} /> Ask the Mentor
           </Button>
+          <button
+            onClick={onWhyTrust}
+            className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-700 hover:text-brand-800"
+          >
+            <ShieldCheck size={14} /> Why can I trust this score?
+          </button>
         </div>
 
         <div className="flex-1 space-y-4">

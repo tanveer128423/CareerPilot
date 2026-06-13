@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRight, ShieldCheck, Sparkles, Target } from "lucide-react";
 import { Button } from "../components/common/Button";
 import { Card } from "../components/common/Card";
+import { MiniScoreClimb } from "../components/common/MiniScoreClimb";
 
 export function LandingPage() {
   const nav = useNavigate();
@@ -26,6 +27,10 @@ export function LandingPage() {
           <Button size="lg" variant="secondary" onClick={() => nav("/compare")}>
             See a live example
           </Button>
+        </div>
+
+        <div className="mt-10 flex justify-center">
+          <MiniScoreClimb />
         </div>
       </section>
 

@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Check, Copy, KeyRound, RotateCcw } from "lucide-react";
+import { Check, Copy, Download, KeyRound, RotateCcw } from "lucide-react";
 import { Button } from "../common/Button";
 import { Badge } from "../common/Badge";
 import { formatPlainSummary } from "../../utils/format";
+import { openPrintableReport } from "../../utils/report";
 import { isCustomRoleName } from "../../utils/constants";
 import type { AnalysisResult } from "../../types";
 
@@ -50,6 +51,9 @@ export function DashboardHeader({
         <Button variant="secondary" onClick={copy}>
           {copied ? <Check size={16} className="text-success" /> : <Copy size={16} />}
           {copied ? "Copied!" : "Copy Summary"}
+        </Button>
+        <Button variant="secondary" onClick={() => openPrintableReport(analysis)}>
+          <Download size={16} /> Download Report
         </Button>
         <Button variant="ghost" onClick={onReset}>
           <RotateCcw size={16} /> Start New

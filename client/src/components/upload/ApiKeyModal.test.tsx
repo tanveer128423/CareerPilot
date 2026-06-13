@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { ApiKeyModal } from "./ApiKeyModal";
+import * as api from "../../api/client";
 
 describe("ApiKeyModal", () => {
   it("renders the key input and a help section", () => {
@@ -17,12 +18,15 @@ describe("ApiKeyModal", () => {
     expect(cont).not.toBeDisabled();
   });
 
-  it("calls onContinue with the trimmed key", () => {
+  it("calls onContinue with the trimmed key after the key validates", async () => {
+    const validateSpy = vi.spyOn(api, "postValidateKey").mockResolvedValue({ valid: true });
     const onContinue = vi.fn();
     render(<ApiKeyModal open onClose={() => {}} onContinue={onContinue} />);
     fireEvent.change(screen.getByLabelText(/Gemini API key/i), { target: { value: "  abc123  " } });
     fireEvent.click(screen.getByRole("button", { name: /continue/i }));
-    expect(onContinue).toHaveBeenCalledWith("abc123");
+    await waitFor(() => expect(onContinue).toHaveBeenCalledWith("abc123"));
+    expect(validateSpy).toHaveBeenCalledWith("abc123");
+    validateSpy.mockRestore();
   });
 
   it("does not render when closed", () => {

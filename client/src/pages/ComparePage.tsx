@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, CheckCircle2, Map as MapIcon, XCircle } from "lucide-react";
 import { useApp } from "../context/AppContext";
@@ -6,9 +7,12 @@ import { Button } from "../components/common/Button";
 import { Badge } from "../components/common/Badge";
 import { ScoreGauge } from "../components/common/ScoreGauge";
 import { Stagger, StaggerItem } from "../components/common/Motion";
+import { ScoreGlowUp } from "../components/compare/ScoreGlowUp";
 import { buildDemoSeed, DEMO_RESUME_IDS, type DemoResumeId } from "../demo/demoMode";
 import { readinessLabel } from "../utils/format";
 import type { AnalysisResult, RoleName } from "../types";
+
+type CompareMode = "transformation" | "sideBySide";
 
 const PROFILE_META: Record<DemoResumeId, { name: string; blurb: string }> = {
   "bilal-backend": {
@@ -24,6 +28,7 @@ const PROFILE_META: Record<DemoResumeId, { name: string; blurb: string }> = {
 export function ComparePage() {
   const nav = useNavigate();
   const { dispatch } = useApp();
+  const [mode, setMode] = useState<CompareMode>("transformation");
 
   const profiles = DEMO_RESUME_IDS.map((id) => ({ id, seed: buildDemoSeed(id) }));
 
@@ -32,6 +37,7 @@ export function ComparePage() {
     dispatch({ type: "SET_ROLE", role: analysis.targetRole as RoleName });
     dispatch({ type: "PARSE_SUCCESS", structuredResume, rawResumeText });
     dispatch({ type: "ANALYZE_SUCCESS", analysisResult: analysis });
+    dispatch({ type: "SET_DEMO_SESSION", demo: true });
     nav("/dashboard");
   };
 
@@ -49,22 +55,60 @@ export function ComparePage() {
           Same role · Same engine · Evidence-based
         </span>
         <h1 className="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">
-          Two candidates, <span className="bg-brand-gradient bg-clip-text text-transparent">one honest score</span>
+          {mode === "transformation" ? (
+            <>
+              Watch the score <span className="bg-brand-gradient bg-clip-text text-transparent">climb</span>
+            </>
+          ) : (
+            <>
+              Two candidates, <span className="bg-brand-gradient bg-clip-text text-transparent">one honest score</span>
+            </>
+          )}
         </h1>
         <p className="mt-3 text-ink-soft max-w-2xl mx-auto">
-          Both targeting <strong>Backend Developer</strong>. CareerPilot computes each readiness score
-          deterministically from real resume evidence — not vibes. Load either to explore the full
-          analysis.
+          {mode === "transformation"
+            ? "Follow the roadmap, re-upload, and the score moves — because the same deterministic engine re-scores the new evidence. Hit play to watch each gap close."
+            : "Both targeting Backend Developer. CareerPilot computes each readiness score deterministically from real resume evidence — not vibes. Load either to explore the full analysis."}
         </p>
+
+        <div className="mt-6 inline-flex rounded-full bg-surface-2 p-1 text-sm font-medium">
+          <button
+            onClick={() => setMode("transformation")}
+            className={`rounded-full px-4 py-1.5 transition ${
+              mode === "transformation" ? "bg-white text-ink shadow-card" : "text-ink-muted hover:text-ink"
+            }`}
+          >
+            The transformation
+          </button>
+          <button
+            onClick={() => setMode("sideBySide")}
+            className={`rounded-full px-4 py-1.5 transition ${
+              mode === "sideBySide" ? "bg-white text-ink shadow-card" : "text-ink-muted hover:text-ink"
+            }`}
+          >
+            Side by side
+          </button>
+        </div>
       </div>
 
-      <Stagger className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {profiles.map(({ id, seed }) => (
-          <StaggerItem key={id}>
-            <ProfileCard analysis={seed.analysis} meta={PROFILE_META[id]} onLoad={() => loadProfile(id)} />
-          </StaggerItem>
-        ))}
-      </Stagger>
+      {mode === "transformation" ? (
+        <div className="max-w-md mx-auto">
+          <ScoreGlowUp
+            before={buildDemoSeed("bilal-backend").analysis}
+            after={buildDemoSeed("aisha-backend").analysis}
+            name="Bilal"
+            onExplore={() => loadProfile("aisha-backend")}
+          />
+        </div>
+      ) : (
+        <Stagger className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {profiles.map(({ id, seed }) => (
+            <StaggerItem key={id}>
+              <ProfileCard analysis={seed.analysis} meta={PROFILE_META[id]} onLoad={() => loadProfile(id)} />
+            </StaggerItem>
+          ))}
+        </Stagger>
+      )}
 
       <p className="text-center text-xs text-ink-muted mt-6">
         These are pre-baked demo profiles — the same deterministic engine runs on any uploaded resume.

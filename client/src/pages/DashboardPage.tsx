@@ -9,6 +9,7 @@ import { ReadinessScore } from "../components/dashboard/ReadinessScore";
 import { ResumeHealthReport } from "../components/dashboard/ResumeHealthReport";
 import { SkillGapMatrix } from "../components/dashboard/SkillGapMatrix";
 import { RoadmapTimeline } from "../components/dashboard/RoadmapTimeline";
+import { GroundingProof } from "../components/dashboard/GroundingProof";
 import { MentorChat } from "../components/mentor/MentorChat";
 import { ApiKeyModal } from "../components/upload/ApiKeyModal";
 import { Stagger, StaggerItem } from "../components/common/Motion";
@@ -17,6 +18,7 @@ export function DashboardPage() {
   const nav = useNavigate();
   const { state, dispatch } = useApp();
   const [chatOpen, setChatOpen] = useState(false);
+  const [proofOpen, setProofOpen] = useState(false);
   const [seed, setSeed] = useState<string | null>(null);
   const [keyModalOpen, setKeyModalOpen] = useState(false);
   // Safety net: if the user reaches the dashboard without a key (e.g. a restored
@@ -39,7 +41,8 @@ export function DashboardPage() {
 
   const askMentor = (q?: string) => {
     setSeed(q ?? null);
-    if (!state.apiKey) {
+    // Key-free sample sessions answer from canned grounded data — no key needed.
+    if (!state.apiKey && !state.demoSession) {
       setPendingChat(true);
       setKeyModalOpen(true);
       return;
@@ -63,7 +66,11 @@ export function DashboardPage() {
 
       <Stagger className="space-y-5">
         <StaggerItem>
-          <ReadinessScore readiness={analysis.readiness} onAskMentor={() => askMentor("Am I ready for internships?")} />
+          <ReadinessScore
+            readiness={analysis.readiness}
+            onAskMentor={() => askMentor("Am I ready for internships?")}
+            onWhyTrust={() => setProofOpen(true)}
+          />
         </StaggerItem>
 
         <StaggerItem className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -86,6 +93,8 @@ export function DashboardPage() {
       </button>
 
       <MentorChat analysis={analysis} open={chatOpen} onClose={() => setChatOpen(false)} seed={seed} />
+
+      <GroundingProof analysis={analysis} open={proofOpen} onClose={() => setProofOpen(false)} />
 
       <ApiKeyModal
         open={keyModalOpen}

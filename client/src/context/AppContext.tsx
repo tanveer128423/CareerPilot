@@ -21,12 +21,15 @@ export interface AppState {
   chatHistory: MentorMessage[];
   status: AppStatus;
   error: { code: string; message: string; retryable: boolean } | null;
+  /** True when running a key-free sample session (mentor uses canned grounded answers). */
+  demoSession: boolean;
 }
 
 type Action =
   | { type: "SET_FILE"; file: File | null }
   | { type: "SET_ROLE"; role: RoleName }
   | { type: "SET_API_KEY"; apiKey: string }
+  | { type: "SET_DEMO_SESSION"; demo: boolean }
   | { type: "PARSE_START" }
   | { type: "PARSE_SUCCESS"; structuredResume: StructuredResume; rawResumeText: string }
   | { type: "ANALYZE_START" }
@@ -47,6 +50,7 @@ const initialState: AppState = {
   chatHistory: [],
   status: "idle",
   error: null,
+  demoSession: false,
 };
 
 function reducer(state: AppState, action: Action): AppState {
@@ -57,6 +61,8 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, targetRole: action.role, error: null };
     case "SET_API_KEY":
       return { ...state, apiKey: action.apiKey };
+    case "SET_DEMO_SESSION":
+      return { ...state, demoSession: action.demo };
     case "PARSE_START":
       return { ...state, status: "parsing", error: null };
     case "PARSE_SUCCESS":

@@ -22,6 +22,10 @@ export function MentorChat({
 }) {
   const { messages, send, pending, followups } = useMentorChat();
   const [input, setInput] = useState("");
+  const m = analysis.matchObject;
+  const citationSkills = Array.from(
+    new Set([...m.requiredSkills, ...m.niceToHaveSkills, ...m.have, ...m.missing]),
+  );
   const scrollRef = useRef<HTMLDivElement>(null);
   const seededRef = useRef(false);
 
@@ -82,8 +86,8 @@ export function MentorChat({
                   Ask anything about your readiness, gaps, or roadmap.
                 </p>
               )}
-              {messages.map((m, i) => (
-                <MessageBubble key={i} message={m} />
+              {messages.map((msg, i) => (
+                <MessageBubble key={i} message={msg} skills={citationSkills} />
               ))}
               {pending && <TypingIndicator />}
             </div>
