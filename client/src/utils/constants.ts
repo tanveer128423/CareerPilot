@@ -7,7 +7,18 @@ export const SUPPORTED_ROLES: RoleName[] = [
   "React Developer",
   "Node.js Developer",
   "Software Engineer Intern",
+  "Data Analyst",
+  "Machine Learning Engineer",
+  "DevOps Engineer",
+  "Mobile App Developer",
+  "Product Manager",
 ];
+
+/** True when a role name is NOT one of the built-in supported roles, i.e. it
+ * was parsed from a pasted job posting. */
+export function isCustomRoleName(role: string): boolean {
+  return !(SUPPORTED_ROLES as string[]).includes(role);
+}
 
 /** Seed chips for the mentor (PRD examples) — also double as the demo script. */
 export const SUGGESTED_QUESTIONS: string[] = [

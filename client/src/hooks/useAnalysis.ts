@@ -1,7 +1,8 @@
 import { useCallback } from "react";
 import { useApp } from "../context/AppContext";
-import { ApiError, postAnalyze, postParse } from "../api/client";
+import { ApiError, postAnalyze, postExtractRole, postParse } from "../api/client";
 import { DEMO_MODE, buildDemoSeed, pickDemoResumeId } from "../demo/demoMode";
+import type { CustomRole } from "../types";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -23,9 +24,10 @@ export function useAnalysis() {
     return analysis;
   }, [state.fileName, dispatch]);
 
-  const run = useCallback(async () => {
+  const run = useCallback(async (jobText?: string) => {
     if (!state.file || !state.targetRole) return;
     if (DEMO_MODE) return runDemo();
+    const jd = (jobText ?? "").trim();
     try {
       dispatch({ type: "PARSE_START" });
       const parsed = await postParse(state.file, state.targetRole, state.apiKey);
@@ -36,11 +38,21 @@ export function useAnalysis() {
       });
 
       dispatch({ type: "ANALYZE_START" });
+
+      // If a job description was pasted, extract its real requirements and grade
+      // the resume against THAT specific posting instead of a generic role.
+      let customRole: CustomRole | undefined;
+      if (jd.length >= 40) {
+        const extracted = await postExtractRole(jd, state.apiKey);
+        customRole = extracted.role;
+      }
+
       const analysis = await postAnalyze(
         {
-          targetRole: state.targetRole,
+          targetRole: customRole ? customRole.name : state.targetRole,
           structuredResume: parsed.structuredResume,
           rawResumeText: parsed.rawResumeText,
+          customRole,
         },
         state.apiKey,
       );

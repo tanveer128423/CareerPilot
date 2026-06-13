@@ -65,7 +65,7 @@ describe("buildGrounding", () => {
   it("includes ONLY deterministic inputs the client holds", () => {
     const g = buildGrounding(analysis, { skills: ["JavaScript"], projects: [], experience: [], education: [] }, "raw text");
     expect(Object.keys(g).sort()).toEqual(
-      ["matchObject", "rawResumeText", "structuredResume", "targetRole"].sort(),
+      ["fromJobPosting", "matchObject", "rawResumeText", "structuredResume", "targetRole"].sort(),
     );
     // Must NOT leak internal analysis shapes.
     const rec = g as unknown as Record<string, unknown>;

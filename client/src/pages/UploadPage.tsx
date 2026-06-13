@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, Check, Loader2 } from "lucide-react";
+import { ArrowRight, Check, Loader2, Sparkles } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { useAnalysis } from "../hooks/useAnalysis";
 import { getRoles } from "../api/client";
+// Note: a Gemini API key is now required up front before analysis.
 import { Card } from "../components/common/Card";
 import { Button } from "../components/common/Button";
 import { ErrorBanner } from "../components/common/ErrorBanner";
 import { FileDropzone } from "../components/upload/FileDropzone";
 import { RoleSelector } from "../components/upload/RoleSelector";
 import { ApiKeyModal } from "../components/upload/ApiKeyModal";
-import { getHealth } from "../api/client";
 import type { RoleEntry } from "../types";
 
 const STEPS = ["Reading resume", "Matching skills", "Scoring readiness", "Building roadmap"];
@@ -23,15 +23,14 @@ export function UploadPage() {
   const [roles, setRoles] = useState<RoleEntry[]>([]);
   const [rolesError, setRolesError] = useState<string | null>(null);
   const [showKeyModal, setShowKeyModal] = useState(false);
-  const [serverHasKey, setServerHasKey] = useState(false);
+  const [jobText, setJobText] = useState("");
+
+  const hasJob = jobText.trim().length >= 40;
 
   useEffect(() => {
     getRoles()
       .then(setRoles)
       .catch(() => setRolesError("Couldn't load roles. Is the API running?"));
-    getHealth()
-      .then((h) => setServerHasKey(Boolean(h.geminiConfigured)))
-      .catch(() => setServerHasKey(false));
   }, []);
 
   const busy = state.status === "parsing" || state.status === "analyzing";
@@ -40,8 +39,9 @@ export function UploadPage() {
 
   const canAnalyze = !!state.file && !!state.targetRole && !busy;
 
-  // Step 1: clicking Analyze opens the API-key modal. If the user already
-  // entered a key earlier this session, proceed straight to analysis.
+  // Step 1: clicking Analyze always requires a Gemini API key up front, so the
+  // whole experience feels consistently AI-powered (and the key is ready for the
+  // mentor later). If the user already entered a key this session, reuse it.
   const onAnalyzeClick = () => {
     if (!canAnalyze) return;
     if (state.apiKey) {
@@ -54,7 +54,7 @@ export function UploadPage() {
   // Step 2: after the key is provided (or skipped), run parse -> analyze.
   const startAnalysis = async () => {
     setShowKeyModal(false);
-    const result = await run();
+    const result = await run(jobText);
     if (result) nav("/dashboard");
   };
 
@@ -82,6 +82,32 @@ export function UploadPage() {
               onSelect={(r) => dispatch({ type: "SET_ROLE", role: r })}
             />
           )}
+        </Card>
+
+        <Card>
+          <div className="flex items-center justify-between mb-1">
+            <h3 className="font-semibold">
+              Paste a real job posting{" "}
+              <span className="text-ink-muted font-normal text-sm">(optional)</span>
+            </h3>
+            {hasJob && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-brand-500/10 text-brand-600 px-2.5 py-0.5 text-xs font-semibold">
+                <Sparkles size={12} /> Grading vs. this job
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-ink-muted mb-3">
+            Paste the description of a specific job you want, and CareerPilot grades your
+            resume against <em>that exact posting</em> — not a generic role.
+          </p>
+          <textarea
+            value={jobText}
+            onChange={(e) => setJobText(e.target.value)}
+            disabled={busy}
+            rows={5}
+            placeholder="e.g. Backend Engineer at Acme. We need strong Node.js, PostgreSQL and Docker experience. You'll build REST APIs at scale. Bonus: Kubernetes, AWS…"
+            className="w-full rounded-xl border border-black/10 bg-surface-2 px-3 py-2 text-sm text-ink placeholder:text-ink-muted/70 focus:outline-none focus:ring-1 focus:ring-brand-400 focus:border-brand-500 resize-y disabled:opacity-60"
+          />
         </Card>
 
         {state.error && (
@@ -124,7 +150,7 @@ export function UploadPage() {
           </Card>
         ) : (
           <Button size="lg" className="w-full" disabled={!canAnalyze} onClick={onAnalyzeClick}>
-            Analyze My Resume <ArrowRight size={18} />
+            {hasJob ? "Analyze vs. this job" : "Analyze My Resume"} <ArrowRight size={18} />
           </Button>
         )}
       </div>
@@ -134,8 +160,6 @@ export function UploadPage() {
         onClose={() => setShowKeyModal(false)}
         onContinue={onKeyContinue}
         initialKey={state.apiKey}
-        allowSkip={serverHasKey}
-        onSkip={() => void startAnalysis()}
       />
     </div>
   );

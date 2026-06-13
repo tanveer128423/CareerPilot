@@ -17,7 +17,12 @@ export type RoleName =
   | "Full Stack Developer"
   | "React Developer"
   | "Node.js Developer"
-  | "Software Engineer Intern";
+  | "Software Engineer Intern"
+  | "Data Analyst"
+  | "Machine Learning Engineer"
+  | "DevOps Engineer"
+  | "Mobile App Developer"
+  | "Product Manager";
 
 export const SUPPORTED_ROLES: readonly RoleName[] = [
   "Frontend Developer",
@@ -26,6 +31,11 @@ export const SUPPORTED_ROLES: readonly RoleName[] = [
   "React Developer",
   "Node.js Developer",
   "Software Engineer Intern",
+  "Data Analyst",
+  "Machine Learning Engineer",
+  "DevOps Engineer",
+  "Mobile App Developer",
+  "Product Manager",
 ] as const;
 
 export const CONFIG = {

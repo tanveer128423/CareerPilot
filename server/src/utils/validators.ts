@@ -42,6 +42,11 @@ const RoleName = {
     "React Developer",
     "Node.js Developer",
     "Software Engineer Intern",
+    "Data Analyst",
+    "Machine Learning Engineer",
+    "DevOps Engineer",
+    "Mobile App Developer",
+    "Product Manager",
   ],
 };
 
@@ -240,7 +245,8 @@ const AnalysisResult = {
   additionalProperties: false,
   required: ["targetRole", "matchObject", "resumeHealth", "readiness", "roadmap"],
   properties: {
-    targetRole: { $ref: "RoleName" },
+    // Either a supported role OR a custom role name parsed from a job posting.
+    targetRole: { type: "string", minLength: 1, maxLength: 60 },
     matchObject: { $ref: "MatchObject" },
     resumeHealth: { $ref: "ResumeHealthReport" },
     readiness: { $ref: "CareerReadiness" },
