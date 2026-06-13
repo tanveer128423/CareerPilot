@@ -65,7 +65,7 @@ CareerPilot/
 │       ├── data/           # roles.json, skillAliases.json
 │       ├── middleware/     # upload, error handling
 │       └── utils/          # validators, logger, apiKey, jsonGuard
-└── *.md             # PRD, ARCHITECTURE, API_CONTRACTS, SCHEMAS, ...
+└── *.md             # README, PITCH
 ```
 
 ---
@@ -128,8 +128,8 @@ Open http://localhost:5173 and upload a resume.
 | `POST` | `/parse`  | Upload resume → structured resume (multipart) |
 | `POST` | `/analyze`| Structured resume + role → full analysis |
 | `POST` | `/mentor` | Grounded mentor chat (non-streaming) |
-
-See [`API_CONTRACTS.md`](./API_CONTRACTS.md) for full request/response schemas.
+| `POST` | `/extract-role` | Pasted job description → structured custom role |
+| `POST` | `/validate-key` | Verify a user-supplied Gemini API key |
 
 ---
 
@@ -153,10 +153,8 @@ cd client && npm run build && npm run preview
 
 ## 📚 Documentation
 
-- [`PRD.md`](./PRD.md) — Product requirements
-- [`ARCHITECTURE.md`](./ARCHITECTURE.md) — System design
-- [`API_CONTRACTS.md`](./API_CONTRACTS.md) — API request/response contracts
-- [`SCHEMAS.md`](./SCHEMAS.md) — Data schemas
+- [`PITCH.md`](./PITCH.md) — Judge one-pager (problem, moat, demo proof points)
+- [`server/TESTING.md`](./server/TESTING.md) — Manual & automated testing guide
 
 ---
 

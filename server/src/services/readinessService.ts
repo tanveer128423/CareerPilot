@@ -21,9 +21,9 @@
  * @module services/readinessService
  */
 
-import type { MatchObject, RoleDefinition } from "./matchService";
-import type { ResumeHealthReport } from "./analysisService";
-import type { StructuredResume } from "./resumeParser";
+import type { MatchObject, RoleDefinition } from "./matchService.js";
+import type { ResumeHealthReport } from "./analysisService.js";
+import type { StructuredResume } from "./resumeParser.js";
 
 /* -------------------------------------------------------------------------- */
 /* Types                                                                       */

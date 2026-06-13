@@ -15,8 +15,8 @@
  * @module services/resumeParser
  */
 
-import { buildAliasIndex, resolveAlias } from "./matchService";
-import skillAliasesData from "../data/skillAliases.json";
+import { buildAliasIndex, resolveAlias } from "./matchService.js";
+import skillAliasesData from "../data/skillAliases.json" with { type: "json" };
 
 /* -------------------------------------------------------------------------- */
 /* Types (align with SCHEMAS.md)                                               */

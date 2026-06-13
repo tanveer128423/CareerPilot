@@ -16,8 +16,8 @@
  * @module services/roadmapService
  */
 
-import type { MatchObject } from "./matchService";
-import type { CareerReadiness } from "./readinessService";
+import type { MatchObject } from "./matchService.js";
+import type { CareerReadiness } from "./readinessService.js";
 
 /* -------------------------------------------------------------------------- */
 /* Types                                                                       */
