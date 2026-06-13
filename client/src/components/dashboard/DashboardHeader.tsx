@@ -31,19 +31,19 @@ export function DashboardHeader({
   };
 
   return (
-    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-      <div>
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Your Analysis</h1>
+    <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-6">
+      <div className="min-w-0">
+        <h1 className="text-2xl font-bold tracking-tight">Your Analysis</h1>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
           <Badge tone="brand">{analysis.targetRole}</Badge>
         </div>
-        <p className="text-sm text-ink-muted mt-0.5">
+        <p className="text-sm text-ink-muted mt-2">
           {isCustomRoleName(analysis.targetRole)
             ? "Graded against your pasted job posting · evidence-based"
             : "Deterministic · grounded · evidence-based"}
         </p>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2 shrink-0">
         <Button variant="secondary" onClick={onEditKey}>
           <KeyRound size={16} className={hasKey ? "text-success" : undefined} />
           {hasKey ? "API Key" : "Add API Key"}
