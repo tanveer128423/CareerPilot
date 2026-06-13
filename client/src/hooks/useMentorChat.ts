@@ -28,8 +28,9 @@ export function useMentorChat() {
         setFollowups(res.suggestedFollowups.length ? res.suggestedFollowups : SUGGESTED_QUESTIONS);
       };
 
-      // Fully offline demo: answer from the canned grounded map, no network.
-      if (DEMO_MODE) {
+      // Fully offline demo (build flag OR key-free sample session): answer from
+      // the canned grounded map, no network and no API key required.
+      if (DEMO_MODE || state.demoSession) {
         const demo = getDemoMentorAnswer(q);
         await new Promise((r) => setTimeout(r, 700)); // keep the typing indicator believable
         if (demo) applyResponse(demo);
@@ -68,7 +69,7 @@ export function useMentorChat() {
         setPending(false);
       }
     },
-    [pending, state.analysisResult, state.structuredResume, state.rawResumeText, state.chatHistory, state.apiKey, dispatch],
+    [pending, state.analysisResult, state.structuredResume, state.rawResumeText, state.chatHistory, state.apiKey, state.demoSession, dispatch],
   );
 
   return { messages: state.chatHistory, send, pending, followups, error };

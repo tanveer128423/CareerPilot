@@ -21,6 +21,10 @@ export function FileDropzone({
         setErr("Please upload a PDF or DOCX file.");
         return false;
       }
+      if (f.size === 0) {
+        setErr("That file looks empty. Please upload a resume with content.");
+        return false;
+      }
       if (f.size > MAX_FILE_SIZE) {
         setErr("File is larger than 5 MB.");
         return false;

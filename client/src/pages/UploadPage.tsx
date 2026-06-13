@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, Check, Loader2, Sparkles } from "lucide-react";
+import { ArrowRight, Check, Loader2, PlayCircle, Sparkles } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { useAnalysis } from "../hooks/useAnalysis";
 import { getRoles } from "../api/client";
+import { buildDemoSeed } from "../demo/demoMode";
+import type { RoleName } from "../types";
 // Note: a Gemini API key is now required up front before analysis.
 import { Card } from "../components/common/Card";
 import { Button } from "../components/common/Button";
@@ -61,6 +63,17 @@ export function UploadPage() {
   const onKeyContinue = (key: string) => {
     dispatch({ type: "SET_API_KEY", apiKey: key });
     void startAnalysis();
+  };
+
+  // Zero-friction path: load a pre-baked sample analysis with no API key. The
+  // dashboard, score-climb, and mentor all work fully offline from canned data.
+  const tryDemo = () => {
+    const { analysis, structuredResume, rawResumeText } = buildDemoSeed("bilal-backend");
+    dispatch({ type: "SET_ROLE", role: analysis.targetRole as RoleName });
+    dispatch({ type: "PARSE_SUCCESS", structuredResume, rawResumeText });
+    dispatch({ type: "ANALYZE_SUCCESS", analysisResult: analysis });
+    dispatch({ type: "SET_DEMO_SESSION", demo: true });
+    nav("/dashboard");
   };
 
   return (
@@ -152,6 +165,21 @@ export function UploadPage() {
           <Button size="lg" className="w-full" disabled={!canAnalyze} onClick={onAnalyzeClick}>
             {hasJob ? "Analyze vs. this job" : "Analyze My Resume"} <ArrowRight size={18} />
           </Button>
+        )}
+
+        {!busy && (
+          <div className="flex items-center gap-3 text-xs text-ink-muted">
+            <span className="h-px flex-1 bg-black/10" /> or <span className="h-px flex-1 bg-black/10" />
+          </div>
+        )}
+
+        {!busy && (
+          <button
+            onClick={tryDemo}
+            className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-brand-400/40 bg-surface-2 px-4 py-3 text-sm font-semibold text-brand-700 hover:border-brand-500 hover:bg-brand-500/5 transition"
+          >
+            <PlayCircle size={17} /> Try a sample resume — no API key needed
+          </button>
         )}
       </div>
 
