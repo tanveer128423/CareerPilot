@@ -64,6 +64,12 @@ export interface AnalyzeHealthInput {
   structuredResume: AnalysisResumeInput;
   matchObject: MatchObject;
   rawResumeText?: string;
+  /**
+   * Keyword set to score against. For custom roles parsed from a job posting
+   * (not in roles.json), pass the posting's keywords here. When omitted, the
+   * role's keywords are looked up from roles.json by name.
+   */
+  roleKeywords?: string[];
 }
 
 /* -------------------------------------------------------------------------- */
@@ -283,9 +289,13 @@ function keywordsForRole(roleName: string): string[] {
  */
 export function scoreKeywordCoverage(
   raw: string,
-  match: MatchObject
+  match: MatchObject,
+  keywordsOverride?: string[]
 ): DimensionScore {
-  const keywords = keywordsForRole(match.role);
+  const keywords =
+    keywordsOverride && keywordsOverride.length > 0
+      ? keywordsOverride
+      : keywordsForRole(match.role);
 
   if (keywords.length === 0) {
     return {
@@ -407,7 +417,7 @@ export function analyzeResumeHealth(
   const formattingQuality = scoreFormatting(raw);
   const impactMetrics = scoreImpactMetrics(raw);
   const skillsCoverage = scoreSkillsCoverage(match);
-  const keywordCoverage = scoreKeywordCoverage(raw, match);
+  const keywordCoverage = scoreKeywordCoverage(raw, match, input.roleKeywords);
   const projectQuality = scoreProjectQuality(resume.projects ?? [], match);
 
   const overallScore = clamp(

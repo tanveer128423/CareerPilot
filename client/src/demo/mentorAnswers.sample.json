@@ -9,6 +9,11 @@
   },
   "answers": [
     {
+      "patterns": ["weather", "write me a poem", "tell me a joke", "recipe", "bitcoin", "stock", "who will win", "president", "capital of", "meaning of life", "your name", "are you human", "who made you", "football", "movie", "song"],
+      "answer": "I'm your CareerPilot mentor, so I only speak to what's in your analysis \u2014 I won't make things up outside it. Let's stay on your Backend Developer goal: your fastest next step is starting Node.js, your #1 missing required skill (Week 1-4 of your roadmap).",
+      "suggestedFollowups": ["What should I learn next?", "Am I ready for internships?", "What project should I build?"]
+    },
+    {
       "patterns": ["ready for internships", "am i ready", "ready to apply"],
       "answer": "For Backend Developer you're at 40/100, so not for backend internships yet — you're missing Node.js, Express.js, REST APIs and MongoDB. You could apply to general or frontend-leaning internships now (you have JavaScript and Git), but close the backend gaps first to be competitive.",
       "suggestedFollowups": ["What should I learn next?", "Which skill gives me the biggest jump?", "How long until I'm ready?"]

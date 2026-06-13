@@ -9,7 +9,12 @@ export type RoleName =
   | "Full Stack Developer"
   | "React Developer"
   | "Node.js Developer"
-  | "Software Engineer Intern";
+  | "Software Engineer Intern"
+  | "Data Analyst"
+  | "Machine Learning Engineer"
+  | "DevOps Engineer"
+  | "Mobile App Developer"
+  | "Product Manager";
 
 export interface RoleEntry {
   id: string;
@@ -98,11 +103,28 @@ export interface RoadmapMilestone {
 export type Roadmap = RoadmapMilestone[];
 
 export interface AnalysisResult {
-  targetRole: RoleName;
+  /** A supported role name, OR a custom name parsed from a job posting. */
+  targetRole: RoleName | string;
   matchObject: MatchObject;
   resumeHealth: ResumeHealthReport;
   readiness: CareerReadiness;
   roadmap: Roadmap;
+}
+
+/** A role definition extracted from a pasted job posting. */
+export interface CustomRole {
+  id: string;
+  name: string;
+  required: string[];
+  niceToHave: string[];
+  keywords: string[];
+}
+
+/** Response from POST /api/extract-role. */
+export interface ExtractRoleResponse {
+  role: CustomRole;
+  title: string;
+  company: string;
 }
 
 export interface ParseResponse {
@@ -124,10 +146,12 @@ export interface MentorResponse {
 
 /** Deterministic grounding the client sends to /api/mentor. */
 export interface MentorGrounding {
-  targetRole: RoleName;
+  targetRole: RoleName | string;
   structuredResume: StructuredResume;
   matchObject: MatchObject;
   rawResumeText: string;
+  /** True when the role was parsed from a job posting (custom, not in roles.json). */
+  fromJobPosting?: boolean;
 }
 
 export interface ApiErrorDetail {

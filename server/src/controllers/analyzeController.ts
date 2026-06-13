@@ -14,7 +14,11 @@
 import type { Request, Response, NextFunction } from "express";
 import { CONFIG, type RoleName } from "../config.js";
 import { AppError, type ApiErrorDetail } from "../utils/AppError.js";
-import matchService, { UnknownRoleError, type RoleDefinition } from "../services/matchService.js";
+import matchService, {
+  UnknownRoleError,
+  generateMatchObjectForRole,
+  type RoleDefinition,
+} from "../services/matchService.js";
 import analyzeResumeHealth, { toSchemaHealth } from "../services/analysisService.js";
 import computeReadiness from "../services/readinessService.js";
 import generateRoadmap from "../services/roadmapService.js";
@@ -45,6 +49,41 @@ function isNonEmptyStringArray(v: unknown): v is string[] {
   return Array.isArray(v) && v.length > 0 && v.every((s) => typeof s === "string" && s.trim().length > 0);
 }
 
+function isStringArray(v: unknown): v is string[] {
+  return Array.isArray(v) && v.every((s) => typeof s === "string");
+}
+
+/**
+ * Validate + normalize an optional custom role (parsed from a job posting).
+ * Returns a clean RoleDefinition, or null when no custom role was supplied.
+ */
+function parseCustomRole(value: unknown): RoleDefinition | null {
+  if (value === undefined || value === null) return null;
+  if (typeof value !== "object" || Array.isArray(value)) {
+    throw validationError([{ field: "customRole", issue: "must be an object" }]);
+  }
+  const r = value as Record<string, unknown>;
+  if (typeof r.name !== "string" || r.name.trim().length === 0) {
+    throw validationError([{ field: "customRole.name", issue: "must be a non-empty string" }]);
+  }
+  if (!isNonEmptyStringArray(r.required)) {
+    throw validationError([
+      { field: "customRole.required", issue: "must be a non-empty array of strings" },
+    ]);
+  }
+  return {
+    id: typeof r.id === "string" ? r.id : "custom-job-posting",
+    name: r.name.trim().slice(0, 60),
+    required: r.required.map((s) => s.trim().slice(0, 60)).slice(0, 12),
+    niceToHave: isStringArray(r.niceToHave)
+      ? r.niceToHave.map((s) => s.trim().slice(0, 60)).filter(Boolean).slice(0, 10)
+      : [],
+    keywords: isStringArray(r.keywords)
+      ? r.keywords.map((s) => s.trim().slice(0, 60)).filter(Boolean).slice(0, 10)
+      : [],
+  };
+}
+
 function validationError(details: ApiErrorDetail[]): AppError {
   return new AppError("VALIDATION_ERROR", "Request validation failed.", {
     status: 400,
@@ -59,10 +98,15 @@ export async function postAnalyze(req: Request, res: Response, next: NextFunctio
       targetRole?: unknown;
       structuredResume?: { skills?: unknown };
       rawResumeText?: unknown;
+      customRole?: unknown;
     };
 
-    // 1. targetRole must be a supported role.
-    if (!isSupportedRole(body.targetRole)) {
+    // 0. A custom role (parsed from a pasted job posting) overrides the
+    //    supported-role dropdown. When present, we match against IT instead.
+    const customRole = parseCustomRole(body.customRole);
+
+    // 1. Without a custom role, targetRole must be a supported role.
+    if (!customRole && !isSupportedRole(body.targetRole)) {
       throw new AppError(
         "INVALID_ROLE",
         "Unsupported target role. Please choose a role from the supported list.",
@@ -97,9 +141,22 @@ export async function postAnalyze(req: Request, res: Response, next: NextFunctio
     }
 
     // Deterministic skill match — computed in code, before any AI call.
+    // Pass raw text so skills mentioned only in prose are still credited.
+    const rawResumeText = typeof body.rawResumeText === "string" ? body.rawResumeText : "";
+    const structuredResume = normalizeResume(sr as Record<string, unknown>, rawResumeText.length);
+
+    // The role we grade against: a parsed job posting if provided, else the
+    // selected supported role from roles.json.
+    const selectedRole: RoleDefinition = customRole ?? ROLES.find((r) => r.name === body.targetRole)!;
+
     let matchObject;
     try {
-      matchObject = matchService.generateMatchObject(body.targetRole, sr.skills);
+      matchObject = generateMatchObjectForRole(
+        selectedRole,
+        sr.skills,
+        matchService.deps,
+        rawResumeText,
+      );
     } catch (e) {
       if (e instanceof UnknownRoleError) {
         throw new AppError(
@@ -110,15 +167,11 @@ export async function postAnalyze(req: Request, res: Response, next: NextFunctio
       throw e;
     }
 
-    // --- Deterministic Resume Health + Career Readiness (no AI) ---
-    const rawResumeText = typeof body.rawResumeText === "string" ? body.rawResumeText : "";
-    const structuredResume = normalizeResume(sr as Record<string, unknown>, rawResumeText.length);
-    const selectedRole = ROLES.find((r) => r.name === body.targetRole)!;
-
     const healthReport = analyzeResumeHealth({
       structuredResume: structuredResume as never,
       matchObject,
       rawResumeText,
+      roleKeywords: customRole ? customRole.keywords : undefined,
     });
     const resumeHealth = toSchemaHealth(healthReport); // API shape { overall, dimensions[] }
 
@@ -133,7 +186,9 @@ export async function postAnalyze(req: Request, res: Response, next: NextFunctio
     const roadmap = generateRoadmap({ matchObject });
 
     // Assemble the full AnalysisResult (SCHEMAS.md #15) and validate before returning.
-    const result = { targetRole: body.targetRole, matchObject, resumeHealth, readiness, roadmap };
+    // For a custom role, targetRole carries the parsed job-posting name.
+    const targetRole = customRole ? customRole.name : (body.targetRole as string);
+    const result = { targetRole, matchObject, resumeHealth, readiness, roadmap };
     const { valid, errors } = validate("AnalysisResult", result);
     if (!valid) {
       logger.error("AnalysisResult failed schema validation", { errors });

@@ -121,7 +121,20 @@ export async function answerMentor(input: AnswerMentorInput): Promise<MentorResp
 
   // --- Reconstruct internal shapes server-side (no AI, no network) ---
   const roleName = grounding.targetRole ?? grounding.matchObject?.role;
-  const selectedRole = ROLES.find((r) => r.name === roleName);
+  // Prefer a known role from roles.json; otherwise synthesize one from the
+  // deterministic matchObject so CUSTOM roles (parsed from a pasted job
+  // posting) are fully supported by the grounded mentor too.
+  const selectedRole: RoleDefinition =
+    ROLES.find((r) => r.name === roleName) ??
+    (grounding.matchObject
+      ? {
+          id: "custom-job-posting",
+          name: grounding.matchObject.role || String(roleName ?? "Target Role"),
+          required: grounding.matchObject.requiredSkills ?? [],
+          niceToHave: grounding.matchObject.niceToHaveSkills ?? [],
+          keywords: [],
+        }
+      : (null as unknown as RoleDefinition));
   if (!selectedRole) {
     throw new AppError("INVALID_ROLE", "Unsupported target role for the mentor.");
   }

@@ -11,6 +11,7 @@ import { SkillGapMatrix } from "../components/dashboard/SkillGapMatrix";
 import { RoadmapTimeline } from "../components/dashboard/RoadmapTimeline";
 import { MentorChat } from "../components/mentor/MentorChat";
 import { ApiKeyModal } from "../components/upload/ApiKeyModal";
+import { Stagger, StaggerItem } from "../components/common/Motion";
 
 export function DashboardPage() {
   const nav = useNavigate();
@@ -18,6 +19,9 @@ export function DashboardPage() {
   const [chatOpen, setChatOpen] = useState(false);
   const [seed, setSeed] = useState<string | null>(null);
   const [keyModalOpen, setKeyModalOpen] = useState(false);
+  // Safety net: if the user reaches the dashboard without a key (e.g. a restored
+  // session), opening the mentor prompts for the key first, then opens the chat.
+  const [pendingChat, setPendingChat] = useState(false);
 
   const analysis = state.analysisResult;
 
@@ -35,6 +39,11 @@ export function DashboardPage() {
 
   const askMentor = (q?: string) => {
     setSeed(q ?? null);
+    if (!state.apiKey) {
+      setPendingChat(true);
+      setKeyModalOpen(true);
+      return;
+    }
     setChatOpen(true);
   };
 
@@ -52,16 +61,20 @@ export function DashboardPage() {
         hasKey={Boolean(state.apiKey)}
       />
 
-      <div className="space-y-5">
-        <ReadinessScore readiness={analysis.readiness} onAskMentor={() => askMentor("Am I ready for internships?")} />
+      <Stagger className="space-y-5">
+        <StaggerItem>
+          <ReadinessScore readiness={analysis.readiness} onAskMentor={() => askMentor("Am I ready for internships?")} />
+        </StaggerItem>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <StaggerItem className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           <SkillGapMatrix matchObject={analysis.matchObject} readiness={analysis.readiness} />
           <ResumeHealthReport health={analysis.resumeHealth} />
-        </div>
+        </StaggerItem>
 
-        <RoadmapTimeline roadmap={analysis.roadmap} />
-      </div>
+        <StaggerItem>
+          <RoadmapTimeline roadmap={analysis.roadmap} />
+        </StaggerItem>
+      </Stagger>
 
       {/* Floating mentor button */}
       <button
@@ -76,11 +89,18 @@ export function DashboardPage() {
 
       <ApiKeyModal
         open={keyModalOpen}
-        onClose={() => setKeyModalOpen(false)}
         initialKey={state.apiKey}
         onContinue={(key) => {
           dispatch({ type: "SET_API_KEY", apiKey: key });
           setKeyModalOpen(false);
+          if (pendingChat) {
+            setPendingChat(false);
+            setChatOpen(true);
+          }
+        }}
+        onClose={() => {
+          setKeyModalOpen(false);
+          setPendingChat(false);
         }}
       />
     </div>

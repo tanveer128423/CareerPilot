@@ -1,8 +1,11 @@
 import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import { Compass } from "lucide-react";
 import { LandingPage } from "./pages/LandingPage";
 import { UploadPage } from "./pages/UploadPage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { ComparePage } from "./pages/ComparePage";
+import { PageTransition } from "./components/common/Motion";
 
 function NavBar() {
   const { pathname } = useLocation();
@@ -15,13 +18,35 @@ function NavBar() {
           </span>
           CareerPilot
         </Link>
-        {pathname !== "/upload" && pathname !== "/dashboard" && (
-          <Link to="/upload" className="text-sm font-medium text-brand-600 hover:text-brand-500">
-            Get started →
-          </Link>
-        )}
+        <div className="flex items-center gap-4">
+          {pathname !== "/compare" && (
+            <Link to="/compare" className="text-sm font-medium text-ink-soft hover:text-ink">
+              Examples
+            </Link>
+          )}
+          {pathname !== "/upload" && pathname !== "/dashboard" && (
+            <Link to="/upload" className="text-sm font-medium text-brand-600 hover:text-brand-500">
+              Get started →
+            </Link>
+          )}
+        </div>
       </div>
     </nav>
+  );
+}
+
+function AnimatedRoutes() {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<PageTransition><LandingPage /></PageTransition>} />
+        <Route path="/upload" element={<PageTransition><UploadPage /></PageTransition>} />
+        <Route path="/dashboard" element={<PageTransition><DashboardPage /></PageTransition>} />
+        <Route path="/compare" element={<PageTransition><ComparePage /></PageTransition>} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </AnimatePresence>
   );
 }
 
@@ -30,12 +55,7 @@ export default function App() {
     <div className="min-h-full flex flex-col">
       <NavBar />
       <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/upload" element={<UploadPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <AnimatedRoutes />
       </main>
     </div>
   );

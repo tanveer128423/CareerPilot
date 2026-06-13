@@ -3,6 +3,7 @@ import { Check, Copy, KeyRound, RotateCcw } from "lucide-react";
 import { Button } from "../common/Button";
 import { Badge } from "../common/Badge";
 import { formatPlainSummary } from "../../utils/format";
+import { isCustomRoleName } from "../../utils/constants";
 import type { AnalysisResult } from "../../types";
 
 export function DashboardHeader({
@@ -36,7 +37,9 @@ export function DashboardHeader({
           <Badge tone="brand">{analysis.targetRole}</Badge>
         </div>
         <p className="text-sm text-ink-muted mt-0.5">
-          Deterministic · grounded · evidence-based
+          {isCustomRoleName(analysis.targetRole)
+            ? "Graded against your pasted job posting · evidence-based"
+            : "Deterministic · grounded · evidence-based"}
         </p>
       </div>
       <div className="flex items-center gap-2">

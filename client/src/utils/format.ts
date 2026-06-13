@@ -1,4 +1,5 @@
 import type { AnalysisResult, MentorGrounding, ScoreBand, StructuredResume } from "../types";
+import { isCustomRoleName } from "./constants";
 
 /** Score band per UI.md: 0-49 danger, 50-79 warning, 80-100 success. */
 export function scoreBand(score: number): ScoreBand {
@@ -41,6 +42,9 @@ export function buildGrounding(
     structuredResume,
     matchObject: analysis.matchObject,
     rawResumeText,
+    // Lets the server allow the grounded mentor to operate on a custom
+    // job-posting role that isn't in roles.json.
+    fromJobPosting: isCustomRoleName(analysis.targetRole),
   };
 }
 

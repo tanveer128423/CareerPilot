@@ -48,8 +48,9 @@ export async function postMentor(req: Request, res: Response, next: NextFunction
       grounding?: {
         targetRole?: unknown;
         structuredResume?: { skills?: unknown };
-        matchObject?: { role?: unknown; missing?: unknown };
+        matchObject?: { role?: unknown; missing?: unknown; requiredSkills?: unknown };
         rawResumeText?: unknown;
+        fromJobPosting?: unknown;
       };
     };
 
@@ -67,9 +68,15 @@ export async function postMentor(req: Request, res: Response, next: NextFunction
       throw validationError("grounding", "must be an object");
     }
 
-    // 3. targetRole (or matchObject.role) must be a supported role.
+    // 3. The role must be either a supported role OR a valid custom role
+    //    (parsed from a job posting) — detected by a non-empty requiredSkills
+    //    list on the grounded matchObject.
     const roleName = g.targetRole ?? g.matchObject?.role;
-    if (!isSupportedRole(roleName)) {
+    const hasCustomRole =
+      g.fromJobPosting === true &&
+      Array.isArray(g.matchObject?.requiredSkills) &&
+      (g.matchObject?.requiredSkills as unknown[]).length > 0;
+    if (!isSupportedRole(roleName) && !hasCustomRole) {
       throw new AppError("INVALID_ROLE", "Unsupported target role. Please choose a supported role.");
     }
 

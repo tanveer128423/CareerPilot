@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ExternalLink, Eye, EyeOff, KeyRound, ShieldCheck, X } from "lucide-react";
+import { AlertCircle, ChevronDown, ExternalLink, Eye, EyeOff, KeyRound, Loader2, ShieldCheck, X } from "lucide-react";
 import { Button } from "../common/Button";
+import { ApiError, postValidateKey } from "../../api/client";
 
 interface Props {
   open: boolean;
@@ -17,12 +18,30 @@ export function ApiKeyModal({ open, onClose, onContinue, initialKey = "", allowS
   const [key, setKey] = useState(initialKey);
   const [show, setShow] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [keyError, setKeyError] = useState<string | null>(null);
 
   const trimmed = key.trim();
 
-  const submit = () => {
-    if (!trimmed) return;
-    onContinue(trimmed);
+  const submit = async () => {
+    if (!trimmed || verifying) return;
+    setKeyError(null);
+    setVerifying(true);
+    try {
+      const { valid, reason } = await postValidateKey(trimmed);
+      if (!valid) {
+        setKeyError(reason ?? "That API key was rejected. Please check it and try again.");
+        return;
+      }
+      onContinue(trimmed);
+    } catch (err) {
+      const e = err as ApiError;
+      setKeyError(
+        e?.message ?? "Couldn't verify your key right now. Please try again.",
+      );
+    } finally {
+      setVerifying(false);
+    }
   };
 
   return (
@@ -55,7 +74,7 @@ export function ApiKeyModal({ open, onClose, onContinue, initialKey = "", allowS
                   </span>
                   <div>
                     <h2 className="font-semibold text-ink">Add your Gemini API key</h2>
-                    <p className="text-xs text-ink-muted">Powers the AI Career Mentor</p>
+                    <p className="text-xs text-ink-muted">Powers your AI analysis & Career Mentor</p>
                   </div>
                 </div>
                 <button onClick={onClose} className="rounded-full p-1.5 hover:bg-surface-2" aria-label="Close">
@@ -73,8 +92,12 @@ export function ApiKeyModal({ open, onClose, onContinue, initialKey = "", allowS
                       id="gemini-key"
                       type={show ? "text" : "password"}
                       value={key}
-                      onChange={(e) => setKey(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && submit()}
+                      onChange={(e) => {
+                        setKey(e.target.value);
+                        if (keyError) setKeyError(null);
+                      }}
+                      onKeyDown={(e) => e.key === "Enter" && void submit()}
+                      disabled={verifying}
                       placeholder="AIza…"
                       autoComplete="off"
                       className="w-full rounded-xl border border-black/10 bg-surface px-3 py-2.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400"
@@ -92,6 +115,12 @@ export function ApiKeyModal({ open, onClose, onContinue, initialKey = "", allowS
                     <ShieldCheck size={13} className="text-success" />
                     Used only for your requests. Never stored on our servers.
                   </p>
+                  {keyError && (
+                    <p className="mt-2 flex items-start gap-1.5 text-xs text-danger">
+                      <AlertCircle size={13} className="mt-0.5 shrink-0" />
+                      {keyError}
+                    </p>
+                  )}
                 </div>
 
                 {/* Help section */}
@@ -125,15 +154,21 @@ export function ApiKeyModal({ open, onClose, onContinue, initialKey = "", allowS
                         <li>Copy the key and paste it above.</li>
                       </ol>
                       <p className="text-xs text-ink-muted">
-                        The free tier is plenty for trying the mentor. Your key stays in your browser.
+                        The free tier is plenty for analyzing your resume and chatting with the mentor. Your key stays in your browser.
                       </p>
                     </div>
                   )}
                 </div>
 
                 <div className="flex items-center gap-2 pt-1">
-                  <Button className="flex-1" disabled={!trimmed} onClick={submit}>
-                    Continue
+                  <Button className="flex-1" disabled={!trimmed || verifying} onClick={() => void submit()}>
+                    {verifying ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" /> Verifying…
+                      </>
+                    ) : (
+                      "Continue"
+                    )}
                   </Button>
                 </div>
                 {allowSkip && onSkip && (

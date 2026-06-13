@@ -1,6 +1,8 @@
 import type {
   AnalysisResult,
   ApiErrorEnvelope,
+  CustomRole,
+  ExtractRoleResponse,
   MentorGrounding,
   MentorMessage,
   MentorResponse,
@@ -82,11 +84,26 @@ export async function postParse(
   return parseOrThrow<ParseResponse>(res);
 }
 
+/** Parse a pasted job description into a structured custom role (AI extraction). */
+export async function postExtractRole(
+  jobText: string,
+  apiKey?: string,
+): Promise<ExtractRoleResponse> {
+  const res = await fetch(`${BASE_URL}/api/extract-role`, {
+    method: "POST",
+    headers: withKey({ "Content-Type": "application/json", Accept: "application/json" }, apiKey),
+    body: JSON.stringify({ jobText }),
+  });
+  return parseOrThrow<ExtractRoleResponse>(res);
+}
+
 export async function postAnalyze(
   payload: {
-    targetRole: RoleName;
+    targetRole: RoleName | string;
     structuredResume: StructuredResume;
     rawResumeText?: string;
+    /** When set, the resume is graded against this job-posting role instead. */
+    customRole?: CustomRole;
   },
   apiKey?: string,
 ): Promise<AnalysisResult> {
@@ -96,6 +113,22 @@ export async function postAnalyze(
     body: JSON.stringify(payload),
   });
   return parseOrThrow<AnalysisResult>(res);
+}
+
+/**
+ * Verify a user-supplied Gemini API key before relying on it. Returns
+ * `{ valid }` (with an optional human reason). Throws ApiError only for
+ * transient failures (network/timeout/rate-limit) the caller may retry.
+ */
+export async function postValidateKey(
+  apiKey: string,
+): Promise<{ valid: boolean; reason?: string }> {
+  const res = await fetch(`${BASE_URL}/api/validate-key`, {
+    method: "POST",
+    headers: withKey({ "Content-Type": "application/json", Accept: "application/json" }, apiKey),
+    body: JSON.stringify({}),
+  });
+  return parseOrThrow<{ valid: boolean; reason?: string }>(res);
 }
 
 export async function postMentor(

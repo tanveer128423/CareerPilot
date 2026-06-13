@@ -19,9 +19,12 @@ export function LandingPage() {
           CareerPilot answers the three questions every grad asks — Am I ready? What do I learn? What
           do I build? — with evidence from your real resume, never hallucinated advice.
         </p>
-        <div className="mt-7 flex items-center justify-center gap-3">
+        <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Button size="lg" onClick={() => nav("/upload")}>
             Analyze My Resume <ArrowRight size={18} />
+          </Button>
+          <Button size="lg" variant="secondary" onClick={() => nav("/compare")}>
+            See a live example
           </Button>
         </div>
       </section>

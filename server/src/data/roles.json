@@ -266,6 +266,226 @@
         "Collaborate using Git and pull requests",
         "Build at least one end-to-end project portfolio piece"
       ]
+    },
+    {
+      "id": "data-analyst",
+      "name": "Data Analyst",
+      "required": [
+        "SQL",
+        "Excel",
+        "Data Visualization",
+        "Python",
+        "Statistics",
+        "Data Cleaning"
+      ],
+      "niceToHave": [
+        "Tableau",
+        "Power BI",
+        "Pandas",
+        "A/B Testing",
+        "Dashboards",
+        "Communication"
+      ],
+      "keywords": [
+        "dashboard",
+        "query",
+        "insights",
+        "KPI",
+        "report",
+        "trend",
+        "analysis",
+        "stakeholder"
+      ],
+      "commonProjects": [
+        "Sales dashboard from a public dataset",
+        "SQL analysis of an e-commerce database",
+        "Exploratory data analysis notebook in Python",
+        "Customer churn analysis with visualizations",
+        "A/B test result analysis and writeup"
+      ],
+      "learningPriorities": [
+        "Write SQL to extract and aggregate data",
+        "Clean and prepare messy real-world datasets",
+        "Summarize data with descriptive statistics",
+        "Build clear charts and dashboards that tell a story",
+        "Communicate findings to non-technical stakeholders"
+      ]
+    },
+    {
+      "id": "machine-learning-engineer",
+      "name": "Machine Learning Engineer",
+      "required": [
+        "Python",
+        "Machine Learning",
+        "Pandas",
+        "NumPy",
+        "Scikit-learn",
+        "Statistics"
+      ],
+      "niceToHave": [
+        "Deep Learning",
+        "TensorFlow",
+        "PyTorch",
+        "SQL",
+        "Model Deployment",
+        "NLP"
+      ],
+      "keywords": [
+        "model",
+        "training",
+        "dataset",
+        "feature",
+        "accuracy",
+        "prediction",
+        "pipeline",
+        "inference"
+      ],
+      "commonProjects": [
+        "Classification model on a Kaggle dataset",
+        "House price regression with scikit-learn",
+        "Sentiment analysis on text reviews",
+        "Image classifier with a neural network",
+        "End-to-end ML pipeline with a deployed API"
+      ],
+      "learningPriorities": [
+        "Master data manipulation with Pandas and NumPy",
+        "Train and evaluate models with scikit-learn",
+        "Understand core ML algorithms and metrics",
+        "Apply statistics to validate model results",
+        "Deploy a trained model behind a simple API"
+      ]
+    },
+    {
+      "id": "devops-engineer",
+      "name": "DevOps Engineer",
+      "required": [
+        "Linux",
+        "Docker",
+        "CI/CD",
+        "Cloud",
+        "Bash",
+        "Git"
+      ],
+      "niceToHave": [
+        "Kubernetes",
+        "Terraform",
+        "AWS",
+        "Monitoring",
+        "Networking",
+        "Ansible"
+      ],
+      "keywords": [
+        "pipeline",
+        "deployment",
+        "container",
+        "infrastructure",
+        "automation",
+        "server",
+        "monitoring",
+        "scalability"
+      ],
+      "commonProjects": [
+        "CI/CD pipeline with GitHub Actions",
+        "Dockerize a multi-service app",
+        "Provision cloud infrastructure with Terraform",
+        "Deploy and monitor an app on a cloud VM",
+        "Automated deployment with rollback"
+      ],
+      "learningPriorities": [
+        "Be comfortable on the Linux command line and Bash",
+        "Containerize applications with Docker",
+        "Build CI/CD pipelines that test and deploy automatically",
+        "Provision and manage cloud infrastructure",
+        "Add monitoring, logging, and alerting"
+      ]
+    },
+    {
+      "id": "mobile-app-developer",
+      "name": "Mobile App Developer",
+      "required": [
+        "Java",
+        "Android",
+        "REST APIs",
+        "Git",
+        "UI Design",
+        "State Management"
+      ],
+      "niceToHave": [
+        "Kotlin",
+        "React Native",
+        "Flutter",
+        "Firebase",
+        "Jetpack Compose",
+        "Unit Testing"
+      ],
+      "keywords": [
+        "app",
+        "screen",
+        "mobile",
+        "layout",
+        "navigation",
+        "gradle",
+        "devices",
+        "offline"
+      ],
+      "commonProjects": [
+        "To-do mobile app with local storage",
+        "Weather app consuming a REST API",
+        "Notes app with Firebase sync",
+        "News reader with navigation between screens",
+        "Expense tracker with charts"
+      ],
+      "learningPriorities": [
+        "Build screens and layouts for mobile devices",
+        "Consume REST APIs and handle loading/error states",
+        "Manage app state and navigation cleanly",
+        "Design touch-friendly, responsive UI",
+        "Persist data locally and sync with a backend"
+      ]
+    },
+    {
+      "id": "product-manager",
+      "name": "Product Manager",
+      "required": [
+        "Product Strategy",
+        "User Research",
+        "Roadmapping",
+        "Communication",
+        "Data Analysis",
+        "Agile"
+      ],
+      "niceToHave": [
+        "Wireframing",
+        "SQL",
+        "A/B Testing",
+        "Stakeholder Management",
+        "Prioritization",
+        "Metrics"
+      ],
+      "keywords": [
+        "roadmap",
+        "user",
+        "stakeholder",
+        "backlog",
+        "feature",
+        "metric",
+        "requirements",
+        "prioritization"
+      ],
+      "commonProjects": [
+        "Product requirements document for a real app idea",
+        "User research study with interviews and findings",
+        "Feature prioritization framework and roadmap",
+        "Competitive analysis and product teardown",
+        "Metrics dashboard defining success for a feature"
+      ],
+      "learningPriorities": [
+        "Translate user problems into a product strategy",
+        "Run user research and synthesize insights",
+        "Build and communicate a prioritized roadmap",
+        "Use data and metrics to drive decisions",
+        "Work in agile cycles with engineering and design"
+      ]
     }
   ]
 }
