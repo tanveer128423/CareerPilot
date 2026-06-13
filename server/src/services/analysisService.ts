@@ -18,8 +18,8 @@
  * @module services/analysisService
  */
 
-import rolesData from "../data/roles.json";
-import type { MatchObject, RoleDefinition } from "./matchService";
+import rolesData from "../data/roles.json" with { type: "json" };
+import type { MatchObject, RoleDefinition } from "./matchService.js";
 
 /* -------------------------------------------------------------------------- */
 /* Types                                                                       */

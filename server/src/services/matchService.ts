@@ -17,8 +17,8 @@
  * @module services/matchService
  */
 
-import rolesData from "../data/roles.json";
-import skillAliasesData from "../data/skillAliases.json";
+import rolesData from "../data/roles.json" with { type: "json" };
+import skillAliasesData from "../data/skillAliases.json" with { type: "json" };
 
 /* -------------------------------------------------------------------------- */
 /* Type Definitions                                                            */

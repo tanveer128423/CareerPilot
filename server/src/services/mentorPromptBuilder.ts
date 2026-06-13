@@ -14,11 +14,11 @@
  * @module services/mentorPromptBuilder
  */
 
-import type { StructuredResume } from "./resumeParser";
-import type { MatchObject } from "./matchService";
-import type { ResumeHealthReport, DimensionScore } from "./analysisService";
-import type { CareerReadiness } from "./readinessService";
-import type { RoadmapMilestone } from "./roadmapService";
+import type { StructuredResume } from "./resumeParser.js";
+import type { MatchObject } from "./matchService.js";
+import type { ResumeHealthReport, DimensionScore } from "./analysisService.js";
+import type { CareerReadiness } from "./readinessService.js";
+import type { RoadmapMilestone } from "./roadmapService.js";
 
 /* -------------------------------------------------------------------------- */
 /* Types                                                                       */

@@ -72,7 +72,7 @@ curl -F "file=@/path/to/resume.pdf" -F "targetRole=Astronaut" \
   http://localhost:8080/api/parse
 ```
 Working = extracted text returned; scanned/image PDF → **422 PARSE_FAILED**.
-(Use the demo resumes in `prep/01-DEMO-RESUMES.md`.)
+(Use any text-based PDF/DOCX resume, or the in-app "Try a sample" demo profiles.)
 
 ---
 
@@ -126,7 +126,7 @@ For this input: `have:["JavaScript","Node.js","Express.js","Git"]`,
 `missing:["REST APIs","MongoDB"]`, `coveragePercentage: 67`.
 **Determinism check:** run it twice — results must be byte-identical.
 
-Cross-check against `prep/02-EXPECTED-RESULTS.md` golden numbers:
+Cross-check against the demo golden numbers (see `client/src/demo/analysisResult.sample.json`):
 - Bilal (weak backend) → 40/100
 - Aisha (strong backend) → 87/100
 
