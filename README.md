@@ -1,6 +1,7 @@
 # 🧭 CareerPilot
 
 > Your AI-powered career copilot — from resume to dream role.
+> Check it out here - https://career-pilot-rust-tau.vercel.app/
 
 CareerPilot is an **evidence-based AI career copilot** for students and fresh
 graduates. Upload your resume, pick a target role, and instantly get a
@@ -164,3 +165,4 @@ cd client && npm run build && npm run preview
 - API keys are **never logged or stored**; per-request keys are used only to
   construct the Gemini client for that request.
 - Never commit your `.env` — only `.env.example` belongs in version control.
+
