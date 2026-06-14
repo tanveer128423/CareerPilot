@@ -3,6 +3,10 @@
 > Your AI-powered career copilot — from resume to dream role.
 > Check it out here - https://career-pilot-rust-tau.vercel.app/
 
+## Live Portfolio
+
+🌐 https://khalid-tanveer.vercel.app
+
 CareerPilot is an **evidence-based AI career copilot** for students and fresh
 graduates. Upload your resume, pick a target role, and instantly get a
 **Resume Health Report**, a **Career Readiness Score**, an **evidence-backed
